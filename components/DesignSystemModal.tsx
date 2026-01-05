@@ -20,9 +20,9 @@ const DesignSystemModal: React.FC<DesignSystemModalProps> = ({ onAnalysisComplet
       const result = await analyzeDesignSystem(input);
       onAnalysisComplete(result);
       setIsOpen(false);
+      setInput('');
     } catch (error) {
       console.error("Design System Analysis failed:", error);
-      alert("Analysis failed. Please try again.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -32,54 +32,52 @@ const DesignSystemModal: React.FC<DesignSystemModalProps> = ({ onAnalysisComplet
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-6 py-3 bg-white text-gray-900 border border-gray-200 font-bold rounded-2xl shadow-sm hover:shadow-md hover:border-gray-300 transition-all active:scale-95"
+        className="flex items-center gap-2 px-5 py-2.5 bg-[#1a1612] text-white text-[12px] font-black rounded-2xl shadow-xl hover:bg-black transition-all active:scale-95"
       >
-        <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-        Design System Consultant
+        <svg className="w-4 h-4 text-[#b08d57]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+        <span className="hidden sm:inline">전문 컨설팅</span>
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="bg-gray-900 p-8 text-white relative">
-              <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-white/70 hover:text-white">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-300">
+          <div className="bg-[#fdfbf7] border border-[#e8dfd0] rounded-[40px] w-full max-w-xl shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+            <div className="bg-[#1a1612] p-10 text-white relative blueprint-grid">
+              <button onClick={() => setIsOpen(false)} className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
-              <h2 className="text-2xl font-bold flex items-center gap-3">
-                <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                Design System Consultant
+              <h2 className="text-3xl font-black flex items-center gap-4 serif-title">
+                전문 아키텍트 컨설팅
               </h2>
-              <p className="mt-2 text-gray-400 text-sm">Paste a GitHub URL or describe your project to get expert recommendations.</p>
+              <p className="mt-4 text-gray-400 text-lg font-medium leading-relaxed">프로젝트의 URL이나 상세 설명을 입력해주세요. 최적의 디자인 시스템과 기술 스택을 제안합니다.</p>
             </div>
             
-            <div className="p-8">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Project Input</label>
+            <div className="p-10">
               <textarea 
-                className="w-full h-40 p-4 border rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none text-gray-700 bg-gray-50 placeholder:text-gray-400"
-                placeholder="e.g. https://github.com/facebook/react or 'A fintech app for crypto trading with heavy data visualization...'"
+                className="w-full h-48 p-6 border-2 border-[#e8dfd0] rounded-[32px] focus:ring-4 focus:ring-[#b08d57]/10 focus:border-[#b08d57] outline-none transition-all resize-none text-[#1a1612] bg-white placeholder:text-[#dcd0bc] text-base leading-relaxed"
+                placeholder="예: https://github.com/my-project 또는 '데이터 시각화가 많은 핀테크 대시보드 시스템을 설계 중입니다...'"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
               />
               
-              <div className="mt-8 flex gap-3">
+              <div className="mt-10 flex gap-4">
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 py-4 text-gray-500 font-semibold hover:bg-gray-50 rounded-2xl transition-all"
+                  className="flex-1 py-4 text-[#8a7e72] font-black hover:bg-gray-100 rounded-2xl transition-all"
                 >
-                  Cancel
+                  취소
                 </button>
                 <button 
-                  disabled={isAnalyzing}
+                  disabled={isAnalyzing || !input.trim()}
                   onClick={handleAnalyze}
-                  className="flex-[2] py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 disabled:bg-gray-300"
+                  className="flex-[2] py-4 bg-[#8e2e2c] text-white font-black rounded-2xl hover:bg-black transition-all flex items-center justify-center gap-4 disabled:opacity-30 shadow-xl"
                 >
                   {isAnalyzing ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Analyzing...
+                      <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>분석 중...</span>
                     </>
                   ) : (
-                    <>Get Expert Advice</>
+                    <>컨설팅 리포트 생성</>
                   )}
                 </button>
               </div>

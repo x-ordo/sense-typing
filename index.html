@@ -3,8 +3,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TypeSense | AI 한글 폰트 & 디자인 아키텍트</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>TypeSense | AI Font Marketplace</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,10 +14,8 @@
       --hanji-bg: #fdfbf7;
       --korean-black: #1a1612;
       --madder-red: #8e2e2c;
-      --pine-green: #3a4d3f;
       --gold-accent: #b08d57;
       --paper-border: #e2d9c8;
-      --spacing-unit: 8px;
     }
     body {
       font-family: 'IBM Plex Sans KR', sans-serif;
@@ -27,43 +25,55 @@
       background-attachment: fixed;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     .serif-title {
       font-family: 'Noto Serif KR', serif;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.04em;
     }
     .hanji-card {
-      background-color: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(12px);
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
       border: 1px solid var(--paper-border);
-      box-shadow: 0 4px 30px -10px rgba(42, 36, 30, 0.08);
+      box-shadow: 0 4px 30px -5px rgba(42, 36, 30, 0.05);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .hanji-card:hover {
-      border-color: var(--gold-accent);
-      background-color: #fff;
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px -12px rgba(176, 141, 87, 0.15);
+    @media (hover: hover) {
+      .hanji-card:hover {
+        border-color: var(--gold-accent);
+        background-color: #fff;
+        transform: translateY(-6px);
+        box-shadow: 0 30px 60px -15px rgba(176, 141, 87, 0.15);
+      }
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
+    .blueprint-grid {
+      background-image: linear-gradient(rgba(176, 141, 87, 0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(176, 141, 87, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
+    .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #dcd0bc; border-radius: 20px; }
+    
+    .floating-assistant {
+      box-shadow: 0 20px 80px -20px rgba(0,0,0,0.3);
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #dcd0bc;
-      border-radius: 20px;
+
+    /* Mobile specific tweaks */
+    @media (max-width: 640px) {
+      .mobile-safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 120px); }
     }
-    .vibe-glow {
-      box-shadow: 0 0 50px rgba(176, 141, 87, 0.1);
+
+    .pill-glow {
+      box-shadow: 0 0 20px rgba(176, 141, 87, 0.15);
     }
-    .blueprint-bg {
-      background-image: radial-gradient(rgba(176, 141, 87, 0.1) 1px, transparent 1px);
-      background-size: 24px 24px;
+
+    .text-reveal {
+      animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    .text-balance {
-      text-wrap: balance;
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 <script type="importmap">
