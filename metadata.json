@@ -1,0 +1,7 @@
+{
+  "name": "TypeSense - AI Font Marketplace",
+  "description": "A next-generation font marketplace with emotional filtering, real-time previews, and a Gemini-powered AI font consultant for project analysis.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
