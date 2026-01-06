@@ -27,10 +27,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FDFBF7] text-gray-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-zinc-900`}
       >
+        <div className="fixed inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none"></div>
         <Navbar />
-        <main className="min-h-screen">
+        <main className="min-h-screen relative">
           {children}
         </main>
         <Footer />

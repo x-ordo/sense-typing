@@ -20,7 +20,6 @@ interface Font {
 export default function Home() {
   const [query, setQuery] = useState('');
   const [previewText, setPreviewText] = useState('');
-  const [loading, setLoading] = useState(true);
   const [recommendedFonts, setRecommendedFonts] = useState<Font[]>([]);
   const [newFonts, setNewFonts] = useState<Font[]>([]);
 
@@ -37,112 +36,114 @@ export default function Home() {
         { id: 'n2', name: 'Dongsungro', foundry: '대구광역시', license_type: 'OFL', tags: ['장식체', '지역서체'], description: '대구 동성로의 활기를 담은 서체', source_url: '#' },
         { id: 'n3', name: 'School-Ansim', foundry: 'KERIS', license_type: 'OFL', tags: ['고딕', '안심'], description: '학교에서 안심하고 쓰는 폰트', source_url: '#' },
       ]);
-      setLoading(false);
     }, 500);
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Searching for:", query);
-  };
-
   return (
-    <div className="min-h-screen text-gray-900 font-sans selection:bg-black selection:text-white pb-20">
+    <div className="min-h-screen text-zinc-900 font-sans selection:bg-indigo-500 selection:text-white pb-20">
       
-      <main className="px-6 md:px-12 py-12 max-w-[1600px] mx-auto">
+      <main className="px-6 md:px-12 py-24 max-w-[1600px] mx-auto">
         
-        {/* Search Hero */}
-        <section className="mb-20 text-center max-w-3xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter leading-[1] text-zinc-900">
-            당신의 의도를<br/>
-            <span className="text-zinc-400">타이핑하십시오.</span>
+        {/* Editorial Hero */}
+        <section className="mb-32 flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black mb-10 tracking-widest uppercase border border-indigo-100 shadow-sm animate-bounce">
+            Next-Gen Type Intelligence
+          </div>
+          <h1 className="text-6xl md:text-[120px] font-black mb-12 tracking-tighter leading-[0.85] text-zinc-900 uppercase italic">
+            Sense<br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Decision.</span>
           </h1>
           
-          <form onSubmit={handleSearch} className="relative group mb-8">
-            <input 
-              type="text" 
-              placeholder="어떤 프로젝트를 위한 폰트를 찾으시나요? (예: '신뢰감 있는 핀테크 브랜드')"
-              className="w-full py-6 pl-8 pr-16 bg-white border-2 border-gray-100 rounded-2xl text-xl focus:outline-none focus:border-black transition-all shadow-xl shadow-zinc-200/50 group-hover:shadow-2xl"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-black text-white rounded-xl hover:scale-105 transition-transform shadow-lg">
-              <Search className="w-6 h-6" />
-            </button>
-          </form>
+          <div className="w-full max-w-4xl relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            <form className="relative bg-white border border-zinc-200 rounded-3xl flex items-center p-2 shadow-2xl overflow-hidden">
+              <input 
+                type="text" 
+                placeholder="Describe your design vibe..."
+                className="flex-1 py-6 pl-8 pr-4 bg-transparent text-xl font-medium focus:outline-none placeholder:text-zinc-300"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button className="px-10 py-6 bg-zinc-900 text-white font-black rounded-2xl hover:bg-indigo-600 transition-all flex items-center gap-3">
+                <Search className="w-6 h-6" /> <span className="hidden md:inline">Analyze Intent</span>
+              </button>
+            </form>
+          </div>
 
-          {/* Noonnu-style Preview Input */}
-          <div className="relative max-w-md mx-auto">
-            <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-2 text-center">Global Preview</label>
+          <div className="mt-16 w-full max-w-lg">
+            <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-4">Real-time Global Preview</p>
             <input 
               type="text"
-              placeholder="테스트 문구를 입력하여 모든 폰트를 비교해보세요"
-              className="w-full px-4 py-3 bg-zinc-100/50 border-b border-zinc-200 focus:border-black outline-none text-center text-sm transition-colors rounded-t-lg"
+              placeholder="타이핑하여 모든 폰트의 감각을 테스트하세요"
+              className="w-full px-6 py-4 bg-zinc-50 border border-zinc-200 focus:border-indigo-500 outline-none text-center text-lg font-medium transition-all rounded-2xl shadow-inner"
               value={previewText}
               onChange={(e) => setPreviewText(e.target.value)}
             />
           </div>
         </section>
 
-        {/* 1. Recommended Section */}
-        <section className="mb-24">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h2 className="text-3xl font-black tracking-tighter mb-2">추천 폰트</h2>
-              <p className="text-zinc-400 text-sm font-medium">가장 많은 사랑을 받는 검증된 폰트들입니다.</p>
-            </div>
-            <Link href="/index" className="text-xs font-black border-b-2 border-black pb-1 hover:text-zinc-500 hover:border-zinc-500 transition-colors">
-              전체 보기 →
-            </Link>
-          </div>
+        {/* Dynamic Sections with Grid Variation */}
+        <div className="grid grid-cols-12 gap-12">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {loading ? [1,2,3].map(i => <div key={i} className="aspect-video bg-zinc-100 animate-pulse rounded-xl" />) 
-                     : recommendedFonts.map(font => <FontCardV2 key={font.id} font={font} previewText={previewText} />)}
-          </div>
-        </section>
-
-        {/* 2. New Arrivals Section */}
-        <section className="mb-24 bg-zinc-50 -mx-6 md:-mx-12 px-6 md:px-12 py-20 rounded-[3rem]">
-          <div className="max-w-[1600px] mx-auto">
-            <div className="flex justify-between items-end mb-10">
-              <div>
-                <h2 className="text-3xl font-black tracking-tighter mb-2">신규 폰트</h2>
-                <p className="text-zinc-400 text-sm font-medium">최근에 새롭게 추가된 신선한 감각의 폰트들을 만나보세요.</p>
+          {/* Featured Sidebar (Sense Metrics) */}
+          <div className="col-span-12 lg:col-span-3">
+            <div className="sticky top-32 p-8 bg-zinc-900 text-white rounded-[2rem] shadow-2xl">
+              <h3 className="text-xl font-black mb-8 border-b border-white/10 pb-4 tracking-tighter italic">TYPE SENSE<br/>METRICS</h3>
+              <div className="space-y-8">
+                <div>
+                  <div className="flex justify-between text-[10px] font-black mb-2 opacity-50 uppercase tracking-widest">Minimalism</div>
+                  <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-indigo-500 w-[85%]"></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between text-[10px] font-black mb-2 opacity-50 uppercase tracking-widest">Authority</div>
+                  <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-purple-500 w-[60%]"></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between text-[10px] font-black mb-2 opacity-50 uppercase tracking-widest">Legibility</div>
+                  <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 w-[95%]"></div>
+                  </div>
+                </div>
               </div>
-              <Link href="/index?sort=new" className="text-xs font-black border-b-2 border-black pb-1 hover:text-zinc-500 transition-colors">
-                더 보기 →
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {loading ? [1,2,3].map(i => <div key={i} className="aspect-video bg-white animate-pulse rounded-xl" />) 
-                       : newFonts.map(font => <FontCardV2 key={font.id} font={font} previewText={previewText} />)}
+              <div className="mt-12 p-6 bg-white/5 rounded-2xl border border-white/10">
+                <p className="text-xs leading-relaxed text-zinc-400">
+                  Sense Typing의 AI는 단순 매칭을 넘어 귀하의 의도에 가장 부합하는 <span className="text-white font-bold">결정적 폰트</span>를 선별합니다.
+                </p>
+              </div>
             </div>
           </div>
-        </section>
 
-        {/* 3. Market Highlight */}
-        <section className="mb-12">
-          <div className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[3rem] p-12 md:p-20 text-white flex flex-col md:flex-row items-center gap-12">
-            <div className="flex-1">
-              <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] font-black tracking-widest uppercase mb-6">Premium Marketplace</span>
-              <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-[1.1]">
-                디자이너를 위한<br/> 특별한 선택, 눈누마켓
-              </h2>
-              <p className="text-indigo-100 text-lg mb-10 max-w-xl leading-relaxed">
-                무료 폰트 이상의 퀄리티와 라이선스 안전성을 보장합니다. 상업적 성공을 위한 완벽한 타이포그래피를 구매하세요.
-              </p>
-              <Link href="/market" className="inline-block px-8 py-4 bg-white text-indigo-600 font-black rounded-xl hover:scale-105 transition-transform shadow-xl">
-                마켓 폰트 둘러보기
-              </Link>
-            </div>
-            <div className="w-full md:w-1/3 aspect-square bg-white/10 backdrop-blur-3xl rounded-3xl border border-white/20 flex items-center justify-center relative group overflow-hidden">
-               <div className="text-8xl font-black select-none group-hover:scale-110 transition-transform duration-700">Aa</div>
-               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </div>
+          {/* Main Content Area */}
+          <div className="col-span-12 lg:col-span-9 space-y-32">
+            
+            {/* Recommended */}
+            <section>
+              <div className="flex items-baseline gap-4 mb-12">
+                <h2 className="text-4xl font-black tracking-tighter uppercase italic">Editor&apos;s Picks</h2>
+                <div className="h-px flex-1 bg-zinc-100"></div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {recommendedFonts.map(font => <FontCardV2 key={font.id} font={font} previewText={previewText} />)}
+              </div>
+            </section>
+
+            {/* New Arrivals with a horizontal list style */}
+            <section>
+              <div className="flex items-baseline gap-4 mb-12">
+                <h2 className="text-4xl font-black tracking-tighter uppercase italic">Fresh Intelligence</h2>
+                <div className="h-px flex-1 bg-zinc-100"></div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {newFonts.map(font => <FontCardV2 key={font.id} font={font} previewText={previewText} />)}
+              </div>
+            </section>
+
           </div>
-        </section>
+        </div>
 
       </main>
 

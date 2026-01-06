@@ -9,29 +9,28 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav className="sticky top-0 z-50 w-full bg-white/70 backdrop-blur-xl border-b border-zinc-100">
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-10">
-          <Link href="/" className="text-xl font-black tracking-tighter text-black">
-            SENSE TYPING
+        <div className="flex items-center gap-12">
+          <Link href="/" className="text-2xl font-black tracking-tighter text-zinc-900 uppercase italic">
+            Sense<span className="text-indigo-600">.</span>
           </Link>
           
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-sm font-bold text-gray-500 hover:text-black transition-colors">추천 폰트</Link>
-            <Link href="/index" className="text-sm font-bold text-gray-500 hover:text-black transition-colors">무료 폰트</Link>
-            <Link href="/market" className="text-sm font-bold text-gray-500 hover:text-black transition-colors">마켓</Link>
-            <Link href="/questions" className="text-sm font-bold text-gray-500 hover:text-black transition-colors">무슨 폰트?</Link>
+            <Link href="/index" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-[0.2em]">Discovery</Link>
+            <Link href="/market" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-[0.2em]">Market</Link>
+            <Link href="/questions" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-[0.2em]">Identity</Link>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2 border border-transparent focus-within:border-black focus-within:bg-white transition-all">
+        <div className="flex items-center gap-6">
+          <div className="hidden lg:flex items-center bg-zinc-100 rounded-xl px-4 py-2 group focus-within:bg-zinc-50 transition-all border border-transparent focus-within:border-zinc-200">
             <input 
               type="text" 
-              placeholder="폰트 검색" 
-              className="bg-transparent outline-none text-xs w-40"
+              placeholder="Explore Type..." 
+              className="bg-transparent outline-none text-[10px] font-bold w-32 placeholder:text-zinc-400 uppercase tracking-widest"
             />
-            <Search className="w-4 h-4 text-gray-400" />
+            <Search className="w-3.5 h-3.5 text-zinc-400 group-focus-within:text-zinc-900" />
           </div>
           
           <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
