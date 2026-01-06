@@ -1,0 +1,4 @@
+font_name,tag_name,category,intent,score,is_premium
+Pretendard,신뢰_전문성,Conversion,전문적인 인상을 주고 싶을 때,5,TRUE
+NanumSquare,친근_첫구매,Conversion,부드러운 인상,4,TRUE
+Noto Sans KR,가독성_본문,Format,,5,FALSE
