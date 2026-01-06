@@ -1,101 +1,142 @@
-import { createSupabaseServer } from '@/lib/supabase/server'
+'use client'
+
+import { useEffect, useState } from 'react'
 import TagChip from './TagChip'
 import PremiumLock from './PremiumLock'
 import { isPremiumTag } from '@/lib/access'
+import { trackSignal } from '@/lib/paywall'
 
-async function getFonts() {
-  const supabase = createSupabaseServer()
-  
-  // Fetch fonts with their related tags
-  // Note: This is a complex join. For MVP, we fetch fonts and then their tags or use a view.
-  // Here we'll fetch fonts and manually aggregate tags for simplicity and control.
-  
-  const { data: fonts } = await supabase
-    .from('fonts')
-    .select('id, name, foundry, preview_url')
-    .limit(12)
+// Mock Use Cases for the Filter (simulating the "Intent Detection")
+const USE_CASES = [
+  { id: 'all', name: '전체 보기', risk: 0 },
+  { id: 'ir', name: '투자 IR (High Risk)', risk: 5 },
+  { id: 'gov', name: '정부/공공 (High Risk)', risk: 5 },
+  { id: 'contract', name: '계약서 (High Risk)', risk: 5 },
+  { id: 'landing', name: '랜딩페이지', risk: 3 },
+]
 
-  if (!fonts) return []
+export default function FontGrid() {
+  const [fonts, setFonts] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedUseCase, setSelectedUseCase] = useState('all')
 
-  // Fetch tags for these fonts
-  const fontIds = fonts.map(f => f.id)
-  const { data: mappings } = await supabase
-    .from('font_emotion_map')
-    .select(`
-      font_id,
-      weight,
-      emotion_tags (
-        id,
-        tag,
-        polarity
-      )
-    `)
-    .in('font_id', fontIds)
+  useEffect(() => {
+    // Initial fetch
+    fetchFonts('권위적_압도감')
+  }, [])
 
-  // Map tags back to fonts
-  return fonts.map(font => {
-    const fontTags = mappings
-      ?.filter(m => m.font_id === font.id)
-      .map(m => ({
-        ...m.emotion_tags, // id, tag, polarity
-        name: m.emotion_tags?.tag, // Normalize for TagChip
-        weight: m.weight
-      }))
-      .sort((a, b) => (b.weight || 0) - (a.weight || 0)) || []
+  const fetchFonts = (tag: string) => {
+    setLoading(true)
+    fetch(`/api/search?tag=${tag}`)
+      .then(res => res.json())
+      .catch(err => {
+        console.error('Failed to fetch fonts:', err)
+        return []
+      })
+      .then(data => {
+        if (!data || !Array.isArray(data)) {
+           setFonts([]);
+           setLoading(false);
+           return;
+        }
 
-    const hasPremium = fontTags.some(t => isPremiumTag(t))
+        const formatted = data.map((item: any) => ({
+          ...item.fonts,
+          tags: [item.emotion_tags], 
+          hasPremium: isPremiumTag(item.emotion_tags)
+        }))
+        
+        setFonts(formatted)
+        setLoading(false)
+      })
+  }
 
-    return {
-      ...font,
-      tags: fontTags,
-      hasPremium
-    }
-  })
-}
+  const handleUseCaseClick = (uc: any) => {
+      setSelectedUseCase(uc.id)
+      if (uc.risk >= 4) {
+          trackSignal('useCaseSelected')
+      }
+      // For MVP demo, we just re-fetch or filter. 
+      // Here we just keep the current list but the signal is tracked.
+  }
 
-export default async function FontGrid() {
-  const fonts = await getFonts()
+  const handleFontClick = () => {
+      trackSignal('detailViewed')
+      // In a real app, this would open a modal or navigate
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-[1200px] mx-auto">
-      {fonts.map((font: any) => (
-        <div key={font.id} className="group relative bg-white border border-gray-100 hover:border-gray-300 transition-all duration-300 p-8 flex flex-col items-start h-full shadow-sm hover:shadow-md">
-          {/* Header */}
-          <div className="w-full flex justify-between items-baseline mb-6">
-            <h3 className="text-xl font-bold text-gray-900 tracking-tight">
-              {font.name}
-            </h3>
-            <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-              {font.foundry}
-            </span>
-          </div>
-
-          {/* Preview (Placeholder if url missing) */}
-          <div className="w-full h-32 mb-6 flex items-center text-4xl text-gray-800 break-keep leading-tight font-[family-name:var(--font-geist-sans)]">
-            {font.preview_url ? (
-               // eslint-disable-next-line @next/next/no-img-element
-               <img src={font.preview_url} alt={font.name} className="max-w-full max-h-full object-contain" />
-            ) : (
-               <span style={{ fontFamily: "sans-serif" }}>다람쥐 헌 쳇바퀴에 타고파</span>
-            )}
-          </div>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-4 mt-auto">
-            {font.tags.slice(0, 4).map((tag: any) => (
-              <TagChip key={tag.id} tag={tag} />
+    <div className="w-full">
+        {/* Intent Filter Bar */}
+        <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
+            {USE_CASES.map(uc => (
+                <button
+                    key={uc.id}
+                    onClick={() => handleUseCaseClick(uc)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors
+                        ${selectedUseCase === uc.id 
+                            ? 'bg-black text-white' 
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}
+                    `}
+                >
+                    {uc.name}
+                </button>
             ))}
-            {font.tags.length > 4 && (
-              <span className="text-xs text-gray-400 py-1">+ {font.tags.length - 4}</span>
-            )}
-          </div>
-
-          {/* Premium Lock (The Hook) */}
-          <div className="w-full">
-            <PremiumLock locked={font.hasPremium} />
-          </div>
         </div>
-      ))}
+
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1,2,3].map(i => (
+                <div key={i} className="h-64 bg-gray-50 animate-pulse border border-gray-100 p-8"></div>
+            ))}
+        </div>
+      ) : fonts.length === 0 ? (
+          <div className="w-full text-center py-20 text-gray-500">
+              <p>연결된 데이터가 없습니다. (Supabase 연결 확인 필요)</p>
+          </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {fonts.map((font: any, i: number) => (
+            <div 
+                key={i} 
+                className="group relative bg-white border border-gray-100 hover:border-gray-300 transition-all duration-300 p-8 flex flex-col items-start h-full shadow-sm hover:shadow-md cursor-pointer"
+                onClick={handleFontClick}
+            >
+              {/* Header */}
+              <div className="w-full flex justify-between items-baseline mb-6">
+                <h3 className="text-xl font-bold text-gray-900 tracking-tight">
+                  {font.name}
+                </h3>
+                <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
+                  {font.foundry}
+                </span>
+              </div>
+
+              {/* Preview */}
+              <div className="w-full h-32 mb-6 flex items-center text-4xl text-gray-800 break-keep leading-tight font-[family-name:var(--font-geist-sans)]">
+                 {font.preview_url ? (
+                   // eslint-disable-next-line @next/next/no-img-element
+                   <img src={font.preview_url} alt={font.name} className="max-w-full max-h-full object-contain" />
+                ) : (
+                   <span style={{ fontFamily: "sans-serif" }}>다람쥐 헌 쳇바퀴에 타고파</span>
+                )}
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-4 mt-auto" onClick={(e) => e.stopPropagation()}>
+                {font.tags.map((tag: any) => (
+                  <TagChip key={tag.id} tag={tag} />
+                ))}
+              </div>
+
+              {/* Premium Lock - Reacts to global state */}
+              <div className="w-full" onClick={(e) => e.stopPropagation()}>
+                <PremiumLock />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
