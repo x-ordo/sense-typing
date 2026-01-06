@@ -2,6 +2,7 @@
 'use client'
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 
 interface FontProps {
@@ -22,10 +23,12 @@ export default function FontCardV2({ font }: { font: FontProps }) {
         {/* Preview Area - Larger & cleaner */}
         <div className="aspect-[16/9] w-full bg-gray-50 flex items-center justify-center p-6 overflow-hidden relative">
            {font.preview_image ? (
-             <img 
+             <Image 
                src={font.preview_image} 
                alt={`${font.name} preview`} 
-               className="object-cover w-full h-full opacity-90 group-hover:opacity-100 transition-opacity"
+               fill
+               className="object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+               unoptimized
              />
            ) : (
              <span className="text-4xl text-gray-800 font-medium whitespace-nowrap" style={{ fontFamily: 'sans-serif' }}>

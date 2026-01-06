@@ -1,12 +1,23 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import FontCardV2 from '@/components/FontCardV2';
 import { Search } from 'lucide-react';
 
+interface Font {
+  id: string;
+  name: string;
+  foundry: string;
+  license_type: string;
+  tags: string[];
+  description: string;
+  preview_image?: string;
+}
+
 export default function Home() {
   const [query, setQuery] = useState('');
-  const [fonts, setFonts] = useState<any[]>([]);
+  const [fonts, setFonts] = useState<Font[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Mock data loader for MVP demo (replace with Supabase fetch later)
@@ -48,8 +59,8 @@ export default function Home() {
       <header className="px-6 md:px-12 h-20 flex items-center justify-between border-b border-gray-200 bg-white/50 backdrop-blur sticky top-0 z-50">
         <div className="text-xl font-bold tracking-tighter">SENSE TYPING</div>
         <nav className="hidden md:flex gap-6 text-sm font-medium text-gray-500">
-          <a href="/fonts" className="hover:text-black transition-colors">All Fonts</a>
-          <a href="/about" className="hover:text-black transition-colors">About</a>
+          <Link href="/fonts" className="hover:text-black transition-colors">All Fonts</Link>
+          <Link href="/about" className="hover:text-black transition-colors">About</Link>
         </nav>
       </header>
 

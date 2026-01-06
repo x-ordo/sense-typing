@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     }
 
     // Fetch available fonts from Supabase to provide context to AI
-    const supabase = createSupabaseServer();
+    const supabase = await createSupabaseServer();
     const { data: fonts } = await supabase
       .from('fonts')
       .select('id, name, license_type, foundry');
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         throw new Error("No response from AI");
     }
 
-    const aiResult = JSON.parse(response.text());
+    const aiResult = JSON.parse(response.text);
 
     // Post-process: Classify Risk/Intent based on the User's Input + AI's analysis
     // We combine the input description and the AI's generated summary for better context detection
@@ -56,8 +56,9 @@ export async function POST(req: Request) {
       aiIntent: intentSignal
     });
 
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'AI Analysis failed';
     console.error("AI Analysis Error:", error);
-    return NextResponse.json({ error: error.message || 'AI Analysis failed' }, { status: 500 });
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

@@ -3,11 +3,26 @@
 import { useEffect, useState } from 'react'
 import TagChip from './TagChip'
 import PremiumLock from './PremiumLock'
-import { isPremiumTag } from '@/lib/access'
+import { isPremiumTag, type Tag } from '@/lib/access'
 import { trackSignal } from '@/lib/paywall'
 
+interface Font {
+  id: string;
+  name: string;
+  foundry: string;
+  preview_url?: string;
+  tags: Tag[];
+  hasPremium: boolean;
+}
+
+interface UseCase {
+  id: string;
+  name: string;
+  risk: number;
+}
+
 // Mock Use Cases for the Filter (simulating the "Intent Detection")
-const USE_CASES = [
+const USE_CASES: UseCase[] = [
   { id: 'all', name: '전체 보기', risk: 0 },
   { id: 'ir', name: '투자 IR (High Risk)', risk: 5 },
   { id: 'gov', name: '정부/공공 (High Risk)', risk: 5 },
@@ -16,7 +31,7 @@ const USE_CASES = [
 ]
 
 export default function FontGrid() {
-  const [fonts, setFonts] = useState<any[]>([])
+  const [fonts, setFonts] = useState<Font[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedUseCase, setSelectedUseCase] = useState('all')
 
@@ -40,7 +55,7 @@ export default function FontGrid() {
            return;
         }
 
-        const formatted = data.map((item: any) => ({
+        const formatted: Font[] = data.map((item: { fonts: Omit<Font, 'tags' | 'hasPremium'>, emotion_tags: Tag }) => ({
           ...item.fonts,
           tags: [item.emotion_tags], 
           hasPremium: isPremiumTag(item.emotion_tags)
@@ -51,7 +66,7 @@ export default function FontGrid() {
       })
   }
 
-  const handleUseCaseClick = (uc: any) => {
+  const handleUseCaseClick = (uc: UseCase) => {
       setSelectedUseCase(uc.id)
       if (uc.risk >= 4) {
           trackSignal('useCaseSelected')
@@ -96,7 +111,7 @@ export default function FontGrid() {
           </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {fonts.map((font: any, i: number) => (
+          {fonts.map((font, i) => (
             <div 
                 key={i} 
                 className="group relative bg-white border border-gray-100 hover:border-gray-300 transition-all duration-300 p-8 flex flex-col items-start h-full shadow-sm hover:shadow-md cursor-pointer"
@@ -124,7 +139,7 @@ export default function FontGrid() {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-4 mt-auto" onClick={(e) => e.stopPropagation()}>
-                {font.tags.map((tag: any) => (
+                {font.tags.map((tag) => (
                   <TagChip key={tag.id} tag={tag} />
                 ))}
               </div>

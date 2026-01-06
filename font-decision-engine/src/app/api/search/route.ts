@@ -6,7 +6,7 @@ import { createSupabaseServer } from '@/lib/supabase/server'
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const tag = searchParams.get('tag')
-  const supabase = createSupabaseServer()
+  const supabase = await createSupabaseServer()
 
   let query = supabase
     .from('font_emotion_map')

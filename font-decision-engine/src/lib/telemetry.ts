@@ -5,7 +5,7 @@ export type TelemetryEvent =
   | 'PAYWALL_UNLOCKED'
   | 'ENTERPRISE_LEAD_SUBMITTED';
 
-export function logTelemetry(event: TelemetryEvent, metadata?: Record<string, any>) {
+export function logTelemetry(event: TelemetryEvent, metadata?: Record<string, unknown>) {
     // For MVP/Cloudflare Pages, we log to console which Cloudflare captures.
     // In production, this would dispatch to a service like PostHog or Supabase.
     

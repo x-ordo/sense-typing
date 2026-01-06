@@ -17,8 +17,9 @@ const MOCK_FONT = {
   preview_text: '모든 사람은 태어날 때부터 자유로우며 그 존엄과 권리에 있어 동등하다.'
 };
 
-export default function FontDetail({ params }: { params: { slug: string } }) {
-  // const font = await fetchFont(params.slug);
+export default async function FontDetail({ params }: { params: Promise<{ slug: string }> }) {
+  await params;
+  // const font = await fetchFont(slug);
   const font = MOCK_FONT; 
 
   return (

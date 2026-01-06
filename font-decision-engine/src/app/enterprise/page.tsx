@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { ShieldCheck, Building2, FileWarning, Users, Scale, FileText } from 'lucide-react'
+import { FileWarning, Users, Scale } from 'lucide-react'
 import ContactModal from '@/components/ContactModal'
 import SmartSearch from '@/components/SmartSearch'
 import { AnalysisResult } from '@/types/ai'
@@ -83,7 +82,7 @@ export default function EnterprisePage() {
             <h2 className="text-3xl font-bold mb-4">Live Risk Engine Demo</h2>
             <p className="text-gray-400">
                조직 모드에서는 AI 분석 결과가 <strong>전체 공개(Unlocked)</strong> 됩니다.<br/>
-               직접 리스크를 입력해보세요. (예: "IR 투자 제안서", "정부 지원 사업")
+               직접 리스크를 입력해보세요. (예: &quot;IR 투자 제안서&quot;, &quot;정부 지원 사업&quot;)
             </p>
          </div>
 

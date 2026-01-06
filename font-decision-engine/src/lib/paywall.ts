@@ -27,7 +27,7 @@ export function getSignals(): PaywallSignal {
       detailViewed: false,
       aiHighRiskDetected: false
     }
-  } catch (e) {
+  } catch {
     return {
       premiumTagTouched: false,
       useCaseSelected: false,

@@ -31,8 +31,22 @@ function analyzeQuery(query: string): Record<string, number> {
   return weights;
 }
 
+export interface Font {
+  id: string;
+  name: string;
+  foundry: string;
+  license_type: string;
+  font_tags: {
+    weight: number;
+    tags: {
+      name: string;
+      category: string;
+    };
+  }[];
+}
+
 export type SearchResult = {
-  font: any;
+  font: Font;
   score: number;
   matchReasons: string[];
 };
@@ -60,21 +74,23 @@ export async function searchFonts(
     dbQuery = dbQuery.ilike('name', `%${query}%`);
   }
 
-  const { data: fonts, error } = await dbQuery;
+  const { data, error } = await dbQuery;
 
-  if (error || !fonts) {
+  if (error || !data) {
     console.error("Search error:", error);
     return [];
   }
 
+  const fonts = data as unknown as Font[];
+
   // Scoring Logic
-  const results: SearchResult[] = fonts.map((font: any) => {
+  const results: SearchResult[] = fonts.map((font) => {
     let score = 0;
     const reasons: string[] = [];
 
     if (hasIntent) {
       // Calculate score based on tag weights
-      font.font_tags.forEach((ft: any) => {
+      font.font_tags.forEach((ft) => {
         const tagName = ft.tags.name;
         const tagWeight = ft.weight || 50;
         const intentWeight = intentWeights[tagName] || 0;

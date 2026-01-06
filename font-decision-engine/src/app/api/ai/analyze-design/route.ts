@@ -31,10 +31,11 @@ export async function POST(req: Request) {
         throw new Error("No response from AI");
     }
 
-    return NextResponse.json(JSON.parse(response.text()));
+    return NextResponse.json(JSON.parse(response.text));
 
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'AI Analysis failed';
     console.error("AI Analysis Error:", error);
-    return NextResponse.json({ error: error.message || 'AI Analysis failed' }, { status: 500 });
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
