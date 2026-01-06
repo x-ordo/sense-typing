@@ -1,6 +1,6 @@
-// src/app/fonts/[slug]/page.tsx
-import Link from 'next/link';
-import { ArrowLeft, Check, AlertTriangle, ExternalLink } from 'lucide-react';
+export const runtime = 'edge';
+
+import { Check, AlertTriangle, ExternalLink } from 'lucide-react';
 
 // In a real app, fetch data based on slug
 const MOCK_FONT = {
@@ -23,13 +23,7 @@ export default async function FontDetail({ params }: { params: Promise<{ slug: s
   const font = MOCK_FONT; 
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="px-6 h-20 flex items-center border-b border-gray-100">
-        <Link href="/" className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-black transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Back to Search
-        </Link>
-      </header>
-
+    <div className="min-h-screen">
       <main className="max-w-5xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-12">
         
         {/* Left: Preview & Visuals */}

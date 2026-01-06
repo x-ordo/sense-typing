@@ -3,11 +3,7 @@ import Link from 'next/link';
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-white font-sans">
-      <header className="px-6 md:px-12 h-20 flex items-center border-b border-gray-100">
-        <Link href="/" className="font-bold tracking-tighter text-xl">SENSE TYPING</Link>
-      </header>
-      
+    <div className="min-h-screen font-sans">
       <main className="max-w-3xl mx-auto px-6 py-20">
         <h1 className="text-4xl font-extrabold mb-8">About Sense Typing</h1>
         
