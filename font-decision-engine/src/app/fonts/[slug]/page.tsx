@@ -90,6 +90,40 @@ export default async function FontDetail({ params }: { params: Promise<{ slug: s
               </div>
             </div>
 
+            <div className="p-6 bg-white border border-gray-200 rounded-lg mb-8 shadow-sm">
+               <h3 className="text-xs font-bold text-gray-500 uppercase mb-4">Technical Specs</h3>
+               <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">지원 형식</span>
+                    <span className="font-medium">OTF, TTF</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">한글 글자수</span>
+                    <span className="font-medium">11,172자 (전체)</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">제작자</span>
+                    <span className="font-medium">{font.foundry}</span>
+                  </div>
+               </div>
+            </div>
+
+            <div className="p-6 bg-blue-50 border border-blue-100 rounded-lg mb-8">
+               <h3 className="text-xs font-bold text-blue-600 uppercase mb-4">Market Simulator</h3>
+               <div className="mb-4">
+                  <label className="block text-[10px] text-blue-400 font-bold mb-2">구매 옵션 선택</label>
+                  <select className="w-full bg-white border border-blue-200 text-sm p-2 rounded outline-none">
+                    <option>기본 라이선스 (₩20,000)</option>
+                    <option>영상/임베딩 포함 (₩50,000)</option>
+                    <option>전체 용도 프리미엄 (₩120,000)</option>
+                  </select>
+               </div>
+               <div className="pt-4 border-t border-blue-100 flex justify-between items-center">
+                  <span className="text-sm font-bold text-blue-800">예상 비용</span>
+                  <span className="text-lg font-black text-blue-900">₩20,000 ~</span>
+               </div>
+            </div>
+
             <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 mb-8">
                <h3 className="text-xs font-bold text-gray-500 uppercase mb-4">License Summary</h3>
                <div className="grid grid-cols-3 gap-2">

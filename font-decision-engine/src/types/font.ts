@@ -12,10 +12,18 @@ export interface Font {
   id: string;
   name: string;
   foundry: string;
+  designer?: string;
   license_type: string;
   license_details?: LicenseDetails;
   preview_image?: string;
   tags: string[];
   description: string;
   webfont_url?: string;
+  price?: number;
+  file_formats?: string[];
+  glyph_count?: {
+    korean: number;
+    english?: number;
+  };
+  source_url: string;
 }
