@@ -1,48 +1,119 @@
-import FontGrid from '@/components/FontGrid'
+'use client'
+
+import { useState, useEffect } from 'react';
+import FontCardV2 from '@/components/FontCardV2';
+import { Search } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">
-      {/* 
-        Design Requirement:
-        - Outer Margin: >15% width, >10% height
-        - Content Max Width: 1200px
-      */}
-      <main className="w-full min-h-screen flex flex-col items-center py-[10vh] px-[5vw] md:px-[10vw] lg:px-[15vw]">
-        
-        {/* Header Section */}
-        <header className="w-full max-w-[1200px] mb-24 text-center md:text-left">
-          <p className="text-sm font-bold tracking-[0.2em] text-gray-400 uppercase mb-6">
-            Font Decision Engine
-          </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-[1.1] mb-8">
-            Fonts are free.<br />
-            <span className="text-gray-400">Decisions are premium.</span>
-          </h1>
-          <p className="max-w-xl text-lg text-gray-600 leading-relaxed">
-            감으로 고르지 마세요. 틀리면 비용이 발생합니다.<br/>
-            이 엔진은 <strong>리스크가 제거된 검증된 선택지</strong>만 보여줍니다.
-          </p>
-        </header>
+  const [query, setQuery] = useState('');
+  const [fonts, setFonts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-        {/* Grid Section */}
-        <section className="w-full max-w-[1200px]">
-          <FontGrid />
+  // Mock data loader for MVP demo (replace with Supabase fetch later)
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      setFonts([
+        { 
+          id: '1', name: 'Pretendard', foundry: 'Kil Hyeong-jin', license_type: 'OFL', 
+          tags: ['sans-serif', 'clean', 'ui'], 
+          description: '어디서나 잘 어울리는 본문용 표준 폰트.',
+          preview_image: 'https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png' // Example
+        },
+        { 
+          id: '2', name: 'Gmarket Sans', foundry: 'Gmarket', license_type: 'OFL', 
+          tags: ['bold', 'display', 'impact'], 
+          description: '강력한 제목용 산세리프. 배너와 이벤트 페이지에 최적.',
+        },
+        {
+          id: '3', name: 'Nanum Myeongjo', foundry: 'Naver', license_type: 'OFL',
+          tags: ['serif', 'classic', 'body'],
+          description: '오랫동안 사랑받은 신뢰의 명조체.'
+        }
+      ]);
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Connect to /api/search with query
+    console.log("Searching for:", query);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#FDFBF7] text-gray-900 font-sans selection:bg-black selection:text-white">
+      
+      {/* Header / Nav */}
+      <header className="px-6 md:px-12 h-20 flex items-center justify-between border-b border-gray-200 bg-white/50 backdrop-blur sticky top-0 z-50">
+        <div className="text-xl font-bold tracking-tighter">SENSE TYPING</div>
+        <nav className="hidden md:flex gap-6 text-sm font-medium text-gray-500">
+          <a href="/fonts" className="hover:text-black transition-colors">All Fonts</a>
+          <a href="/about" className="hover:text-black transition-colors">About</a>
+        </nav>
+      </header>
+
+      <main className="px-6 md:px-12 py-12 max-w-[1600px] mx-auto">
+        
+        {/* Search Hero */}
+        <section className="mb-20 text-center max-w-2xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">
+            Find the font that fits.<br/>
+            <span className="text-gray-400 font-medium">Not just the one that looks good.</span>
+          </h1>
+          
+          <form onSubmit={handleSearch} className="relative group">
+            <input 
+              type="text" 
+              placeholder="Describe your project (e.g. 'Trustworthy Fintech Logo')"
+              className="w-full py-4 pl-6 pr-14 bg-white border-2 border-gray-200 rounded-full text-lg focus:outline-none focus:border-black transition-all shadow-sm group-hover:shadow-md"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-black text-white rounded-full hover:scale-105 transition-transform">
+              <Search className="w-5 h-5" />
+            </button>
+          </form>
+          
+          <div className="mt-4 flex gap-2 justify-center flex-wrap">
+            {['Logo', 'Body Text', 'Cute', 'Serious', 'Modern'].map(tag => (
+              <button 
+                key={tag} 
+                onClick={() => setQuery(tag)}
+                className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs text-gray-500 hover:border-black hover:text-black transition-colors"
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
         </section>
 
-        {/* Footer */}
-        <footer className="w-full max-w-[1200px] mt-32 border-t border-gray-100 pt-8 flex justify-between text-sm text-gray-400">
-          <div>
-            &copy; 2024 Font Decision Engine.
+        {/* Filters (Visual only for MVP) */}
+        <div className="flex gap-4 mb-8 overflow-x-auto pb-2 border-b border-gray-200 sticky top-20 bg-[#FDFBF7] z-40 py-4">
+           {['All', 'Sans Serif', 'Serif', 'Display', 'Handwriting', 'Mono'].map((cat, i) => (
+             <button key={cat} className={`whitespace-nowrap px-4 py-2 rounded text-sm font-medium transition-colors ${i === 0 ? 'bg-black text-white' : 'text-gray-500 hover:bg-gray-100'}`}>
+               {cat}
+             </button>
+           ))}
+        </div>
+
+        {/* Font Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {[1,2,3,4].map(i => (
+              <div key={i} className="aspect-[3/4] bg-gray-100 animate-pulse rounded-sm"></div>
+            ))}
           </div>
-          <div className="flex gap-6">
-            <span>Terms</span>
-            <span>Privacy</span>
-            <span>B2B Inquiries</span>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
+            {fonts.map(font => (
+              <FontCardV2 key={font.id} font={font} />
+            ))}
           </div>
-        </footer>
+        )}
 
       </main>
+
     </div>
   )
 }

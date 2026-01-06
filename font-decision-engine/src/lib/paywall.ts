@@ -4,6 +4,7 @@ export type PaywallSignal = {
   premiumTagTouched: boolean
   useCaseSelected: boolean
   detailViewed: boolean
+  aiHighRiskDetected: boolean // New signal
 }
 
 const STORAGE_KEY = 'fde_paywall_signal'
@@ -14,6 +15,7 @@ export function getSignals(): PaywallSignal {
       premiumTagTouched: false,
       useCaseSelected: false,
       detailViewed: false,
+      aiHighRiskDetected: false
     }
   }
   
@@ -23,12 +25,14 @@ export function getSignals(): PaywallSignal {
       premiumTagTouched: false,
       useCaseSelected: false,
       detailViewed: false,
+      aiHighRiskDetected: false
     }
   } catch (e) {
     return {
       premiumTagTouched: false,
       useCaseSelected: false,
       detailViewed: false,
+      aiHighRiskDetected: false
     }
   }
 }
@@ -37,11 +41,14 @@ export function trackSignal(key: keyof PaywallSignal) {
   if (typeof window === 'undefined') return
 
   const current = getSignals()
+  // Idempotent update: if it's already true, don't write again to save IO/events
+  if (current[key]) return
+
   const updated = { ...current, [key]: true }
   
   localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
   
-  // Dispatch a custom event so components can react immediately without page reload
+  // Dispatch a custom event so components can react immediately
   window.dispatchEvent(new Event('paywall-signal-updated'))
 }
 
@@ -56,7 +63,8 @@ export function getLockReason(): string {
   const signals = getSignals()
   const reasons = []
   
-  if (signals.useCaseSelected) reasons.push("고위험 사용 목적 선택")
+  if (signals.aiHighRiskDetected) reasons.push("전문가용 고위험 문맥")
+  if (signals.useCaseSelected) reasons.push("특수 목적(IR/법무) 선택")
   if (signals.premiumTagTouched) reasons.push("프리미엄 리스크 기준 접근")
   if (signals.detailViewed) reasons.push("상세 판단 근거 조회")
   
