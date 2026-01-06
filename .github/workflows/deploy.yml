@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Dependencies
         working-directory: font-decision-engine
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Build
         working-directory: font-decision-engine
