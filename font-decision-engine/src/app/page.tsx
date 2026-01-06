@@ -17,6 +17,7 @@ interface Font {
 
 export default function Home() {
   const [query, setQuery] = useState('');
+  const [previewText, setPreviewText] = useState('');
   const [fonts, setFonts] = useState<Font[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -85,6 +86,17 @@ export default function Home() {
               <Search className="w-5 h-5" />
             </button>
           </form>
+
+          {/* Noonnu-style Preview Input */}
+          <div className="relative max-w-md mx-auto mb-10">
+            <input 
+              type="text"
+              placeholder="테스트 문구를 입력해보세요"
+              className="w-full px-4 py-2 bg-transparent border-b border-gray-300 focus:border-black outline-none text-center text-sm transition-colors"
+              value={previewText}
+              onChange={(e) => setPreviewText(e.target.value)}
+            />
+          </div>
           
           <div className="mt-4 flex gap-2 justify-center flex-wrap">
             {['Logo', 'Body Text', 'Cute', 'Serious', 'Modern'].map(tag => (
@@ -118,7 +130,7 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
             {fonts.map(font => (
-              <FontCardV2 key={font.id} font={font} />
+              <FontCardV2 key={font.id} font={font} previewText={previewText} />
             ))}
           </div>
         )}

@@ -91,11 +91,42 @@ export default async function FontDetail({ params }: { params: Promise<{ slug: s
             </div>
 
             <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 mb-8">
-               <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">License Type</h3>
-               <p className="font-bold text-gray-900">{font.license_type}</p>
-               <p className="text-xs text-gray-500 mt-1">
-                 * Always check the official license before use.
+               <h3 className="text-xs font-bold text-gray-500 uppercase mb-4">License Summary</h3>
+               <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { label: '인쇄', allowed: true },
+                    { label: '웹사이트', allowed: true },
+                    { label: '영상', allowed: true },
+                    { label: '임베딩', allowed: true },
+                    { label: '포장지', allowed: true },
+                    { label: 'BI/CI', allowed: true },
+                  ].map((item) => (
+                    <div key={item.label} className="flex flex-col items-center p-2 bg-white rounded border border-gray-100">
+                      <span className="text-[10px] text-gray-400 mb-1">{item.label}</span>
+                      <span className={`text-xs font-bold ${item.allowed ? 'text-green-600' : 'text-red-600'}`}>
+                        {item.allowed ? '허용' : '불가'}
+                      </span>
+                    </div>
+                  ))}
+               </div>
+               <p className="text-[10px] text-gray-400 mt-4 italic">
+                 * SIL Open Font License: 상업적 이용 가능 (글꼴 단독 판매 금지)
                </p>
+            </div>
+
+            <div className="p-6 bg-zinc-900 rounded-lg mb-8">
+               <h3 className="text-xs font-bold text-zinc-500 uppercase mb-3">Webfont Snippet</h3>
+               <pre className="text-[10px] text-zinc-300 overflow-x-auto p-2 bg-black/30 rounded font-mono">
+{`@font-face {
+  font-family: '${font.name}';
+  src: url('https://cdn.jsdelivr.net/...');
+  font-weight: 400;
+  font-display: swap;
+}`}
+               </pre>
+               <button className="w-full mt-3 py-2 bg-zinc-800 text-white text-xs font-bold rounded hover:bg-zinc-700 transition-colors">
+                 Copy CSS
+               </button>
             </div>
 
             <a 

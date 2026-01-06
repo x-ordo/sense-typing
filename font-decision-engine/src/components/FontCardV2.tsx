@@ -15,14 +15,18 @@ interface FontProps {
   description?: string;
 }
 
-export default function FontCardV2({ font }: { font: FontProps }) {
+export default function FontCardV2({ font, previewText }: { font: FontProps, previewText?: string }) {
   return (
     <Link href={`/fonts/${font.id}`} className="group block h-full">
       <article className="h-full flex flex-col bg-white border border-gray-100 transition-all duration-300 hover:border-gray-400 hover:shadow-lg rounded-sm overflow-hidden relative">
         
-        {/* Preview Area - Larger & cleaner */}
+        {/* Preview Area */}
         <div className="aspect-[16/9] w-full bg-gray-50 flex items-center justify-center p-6 overflow-hidden relative">
-           {font.preview_image ? (
+           {previewText ? (
+             <span className="text-3xl text-gray-900 font-medium break-all text-center px-4" style={{ fontFamily: 'sans-serif' }}>
+               {previewText}
+             </span>
+           ) : font.preview_image ? (
              <Image 
                src={font.preview_image} 
                alt={`${font.name} preview`} 
@@ -36,7 +40,7 @@ export default function FontCardV2({ font }: { font: FontProps }) {
              </span>
            )}
            
-           {/* License Badge (Subtle) */}
+           {/* License Badge */}
            <div className="absolute top-3 right-3 px-2 py-1 bg-white/80 backdrop-blur text-[10px] font-bold uppercase tracking-wider text-gray-500 border border-gray-200 rounded-full">
              {font.license_type}
            </div>
@@ -55,13 +59,22 @@ export default function FontCardV2({ font }: { font: FontProps }) {
             {font.foundry}
           </p>
 
+          {/* Mini License Matrix (Noonnu-inspired) */}
+          <div className="flex gap-1.5 mb-4 border-t border-gray-50 pt-3">
+             {['印', '웹', '영', '임', '포', 'BI'].map((label, idx) => (
+               <div key={idx} className="w-5 h-5 flex items-center justify-center rounded-sm bg-green-50 text-green-700 text-[9px] font-bold border border-green-100" title="허용됨">
+                 {label}
+               </div>
+             ))}
+          </div>
+
           {font.description && (
             <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed">
               {font.description}
             </p>
           )}
 
-          {/* Tags - Minimal */}
+          {/* Tags */}
           <div className="mt-auto flex flex-wrap gap-1.5">
             {font.tags?.slice(0, 3).map((tag, i) => (
               <span key={i} className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded hover:bg-gray-200 transition-colors">
