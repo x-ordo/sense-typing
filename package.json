@@ -6,7 +6,7 @@
     "font-decision-engine"
   ],
   "scripts": {
-    "build": "npm install && npm run build -w font-decision-engine"
+    "build": "npm install && npm run build -w font-decision-engine && npm run pages:build -w font-decision-engine"
   },
   "engines": {
     "node": ">=18"
