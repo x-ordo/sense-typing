@@ -26,4 +26,6 @@ export interface Font {
     english?: number;
   };
   source_url: string;
+  views?: number;
+  related_fonts?: { id: string; name: string; preview_image?: string }[];
 }

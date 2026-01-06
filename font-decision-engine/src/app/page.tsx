@@ -13,6 +13,8 @@ interface Font {
   tags: string[];
   description: string;
   preview_image?: string;
+  views?: number;
+  source_url: string;
 }
 
 export default function Home() {
@@ -30,17 +32,23 @@ export default function Home() {
           id: '1', name: 'Pretendard', foundry: 'Kil Hyeong-jin', license_type: 'OFL', 
           tags: ['sans-serif', 'clean', 'ui'], 
           description: '어디서나 잘 어울리는 본문용 표준 폰트.',
-          preview_image: 'https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png' // Example
+          preview_image: 'https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png',
+          views: 3710000,
+          source_url: 'https://cactus.tistory.com/306'
         },
         { 
           id: '2', name: 'Gmarket Sans', foundry: 'Gmarket', license_type: 'OFL', 
           tags: ['bold', 'display', 'impact'], 
           description: '강력한 제목용 산세리프. 배너와 이벤트 페이지에 최적.',
+          views: 1200000,
+          source_url: 'https://company.gmarket.co.kr/company/about/company/company--font.asp'
         },
         {
           id: '3', name: 'Nanum Myeongjo', foundry: 'Naver', license_type: 'OFL',
           tags: ['serif', 'classic', 'body'],
-          description: '오랫동안 사랑받은 신뢰의 명조체.'
+          description: '오랫동안 사랑받은 신뢰의 명조체.',
+          views: 2500000,
+          source_url: 'https://hangeul.naver.com/2014/nanum'
         }
       ]);
       setLoading(false);

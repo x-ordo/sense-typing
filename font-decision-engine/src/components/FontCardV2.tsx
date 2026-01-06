@@ -13,6 +13,7 @@ interface FontProps {
   license_type: string;
   tags?: string[];
   description?: string;
+  views?: number;
 }
 
 export default function FontCardV2({ font, previewText }: { font: FontProps, previewText?: string }) {

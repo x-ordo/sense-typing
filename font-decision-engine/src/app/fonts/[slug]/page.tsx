@@ -49,9 +49,26 @@ export default async function FontDetail({ params }: { params: Promise<{ slug: s
         {/* Right: Decision Engine Data */}
         <div className="w-full md:w-[400px] flex-shrink-0">
           <div className="sticky top-12">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">{font.foundry}</span>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{font.foundry}</span>
+              <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full border border-gray-100">
+                조회수 1.2k
+              </span>
+            </div>
             <h1 className="text-4xl font-extrabold text-gray-900 mb-6">{font.name}</h1>
             
+            {/* Same Foundry Fonts (Noonnu-style) */}
+            <div className="mb-8 p-4 bg-gray-50/50 rounded-lg border border-dashed border-gray-200">
+               <h3 className="text-[10px] font-bold text-gray-400 uppercase mb-3 tracking-tighter">More from {font.foundry}</h3>
+               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex-shrink-0 w-20 h-12 bg-white border border-gray-100 rounded flex items-center justify-center text-[8px] font-bold text-gray-300 hover:border-gray-300 cursor-pointer transition-colors">
+                      FONT {i}
+                    </div>
+                  ))}
+               </div>
+            </div>
+
             <div className="flex flex-wrap gap-2 mb-8">
               {font.tags.map(tag => (
                 <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">#{tag}</span>
@@ -143,9 +160,15 @@ export default async function FontDetail({ params }: { params: Promise<{ slug: s
                     </div>
                   ))}
                </div>
-               <p className="text-[10px] text-gray-400 mt-4 italic">
-                 * SIL Open Font License: 상업적 이용 가능 (글꼴 단독 판매 금지)
-               </p>
+               
+               <div className="mt-6 pt-6 border-t border-gray-200">
+                  <h4 className="text-[10px] font-bold text-gray-400 uppercase mb-2">Full License Text</h4>
+                  <div className="text-[10px] text-gray-500 bg-white/50 p-3 rounded h-24 overflow-y-auto leading-relaxed border border-gray-100">
+                    본 폰트 소프트웨어는 SIL OPEN FONT LICENSE Version 1.1에 따라 라이선스가 부여됩니다. 
+                    폰트 소프트웨어를 사용하는 것은 본 라이선스의 모든 조건에 동의함을 의미합니다.
+                    폰트 소프트웨어는 단독으로 판매될 수 없으며, 다른 소프트웨어와 함께 번들로 제공되거나 재배포될 수 있습니다.
+                  </div>
+               </div>
             </div>
 
             <div className="p-6 bg-zinc-900 rounded-lg mb-8">
