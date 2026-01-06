@@ -38,13 +38,9 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: font-decision-engine
-          directory: font-decision-engine/.vercel/output/static
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          workingDirectory: font-decision-engine
+          command: pages deploy font-decision-engine/.vercel/output/static --project-name=font-decision-engine --branch=main
