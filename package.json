@@ -1,8 +1,12 @@
 {
-  "name": "sense-typing-root",
+  "name": "sense-typing-monorepo",
+  "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "font-decision-engine"
+  ],
   "scripts": {
-    "build": "cd font-decision-engine && npm install && npx @cloudflare/next-on-pages"
+    "build": "npm install && npm run build -w font-decision-engine"
   },
   "engines": {
     "node": ">=18"
