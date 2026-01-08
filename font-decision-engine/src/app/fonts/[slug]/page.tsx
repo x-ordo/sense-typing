@@ -1,6 +1,7 @@
 export const runtime = 'edge';
 
 import { Check, AlertTriangle, ExternalLink } from 'lucide-react';
+import { Metadata } from 'next';
 
 // In a real app, fetch data based on slug
 const MOCK_FONT = {
@@ -16,6 +17,22 @@ const MOCK_FONT = {
   source_url: 'https://github.com/orioncactus/pretendard',
   preview_text: '모든 사람은 태어날 때부터 자유로우며 그 존엄과 권리에 있어 동등하다.'
 };
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  // const font = await fetchFont(slug);
+  const font = MOCK_FONT; // Placeholder
+
+  return {
+    title: `${font.name} - Sense Typing Font Store`,
+    description: font.description,
+    openGraph: {
+      title: font.name,
+      description: font.description,
+      type: 'article',
+    }
+  };
+}
 
 export default async function FontDetail({ params }: { params: Promise<{ slug: string }> }) {
   await params;
