@@ -19,6 +19,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             <Link href="/index" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-[0.2em]">Discovery</Link>
             <Link href="/market" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-[0.2em]">Market</Link>
+            <Link href="/kanban" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-[0.2em]">Workflow</Link>
             <Link href="/questions" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-colors uppercase tracking-[0.2em]">Identity</Link>
           </div>
         </div>
