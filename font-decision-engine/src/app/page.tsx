@@ -7,16 +7,18 @@ import SmartSearch from '@/components/SmartSearch';
 import { AnalysisResult } from '@/types/ai';
 import { Plus, Maximize2, Zap } from 'lucide-react';
 
+import { createSupabaseBrowser } from '@/lib/supabase/fonts';
+
 interface FontAsset {
   id: string;
   name: string;
   foundry: string;
   license_type: string;
-  tags: string[];
-  description: string;
+  tags?: string[];
+  description?: string;
   preview_image?: string;
   views?: number;
-  source_url: string;
+  source_url?: string;
   price?: number;
 }
 
@@ -26,13 +28,21 @@ export default function Home() {
   const [allFreeFonts, setAllFreeFonts] = useState<FontAsset[]>([]);
 
   useEffect(() => {
-    const crawledData: FontAsset[] = [
-      { id: "694", name: "Pretendard", foundry: "Kil Hyeong-jin", license_type: "OFL", tags: ["Sans", "UI"], description: "The definitive UI standard.", preview_image: "https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png", source_url: "#" },
-      { id: "366", name: "Gmarket Sans", foundry: "Gmarket", license_type: "OFL", tags: ["Bold", "Impact"], description: "Command attention.", views: 1200000, source_url: "#" },
-      { id: "115", name: "Yeogi-Eottae", foundry: "Yeogi-Eottae", license_type: "OFL", tags: ["Display", "Brand"], description: "Unique brand personality.", views: 950000, source_url: "#" },
-      { id: "1456", name: "Paperlogy", foundry: "Lee Ju-im", license_type: "OFL", tags: ["Modern", "Work"], description: "Architectural precision in type.", views: 150000, source_url: "#" },
-    ];
-    setAllFreeFonts(crawledData);
+    const fetchFonts = async () => {
+      const supabase = createSupabaseBrowser();
+      const { data, error } = await supabase
+        .from('fonts')
+        .select('*')
+        .limit(6);
+      
+      if (error) {
+        console.error("Supabase Error:", error);
+        return;
+      }
+      if (data) setAllFreeFonts(data);
+    };
+
+    fetchFonts();
   }, []);
 
   const handleAnalysisComplete = (result: AnalysisResult) => {

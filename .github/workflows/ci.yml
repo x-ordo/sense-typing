@@ -26,7 +26,10 @@ jobs:
         run: npm run lint -w font-decision-engine
 
       - name: Security Audit
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
+
+      - name: Run Tests
+        run: npm test -w font-decision-engine
 
       - name: Build Verification
         run: npm run build
