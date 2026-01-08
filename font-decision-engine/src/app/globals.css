@@ -3,49 +3,63 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 26, 22, 18;
-  --background-rgb: 253, 251, 247;
+  --brand-black: #121212;
+  --brand-gold: #b08d57;
+  --brand-paper: #f8f8f6;
+  --brand-beige: #e2e2de;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  color: var(--brand-black);
+  background: var(--brand-paper);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  cursor: crosshair; /* Artisan Touch: Precision Cursor */
 }
 
-/* Luxury Paper Texture Overlay */
+/* Artisan Texture: Subtle Grain + Grid Line */
 body::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  opacity: 0.03;
+  inset: 0;
+  opacity: 0.4;
   pointer-events: none;
   z-index: 9999;
-  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+  background-image: 
+    url("https://www.transparenttextures.com/patterns/p6.png"),
+    linear-gradient(to right, rgba(176, 141, 87, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(176, 141, 87, 0.03) 1px, transparent 1px);
+  background-size: auto, 100px 100px, 100px 100px;
 }
 
-.serif-title {
-  font-family: Georgia, serif;
+.serif-display {
+  font-family: "Playfair Display", Georgia, serif;
+  letter-spacing: -0.04em;
+}
+
+.mono-label {
+  font-family: var(--font-geist-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/40 backdrop-blur-xl border border-brand-beige/50 shadow-sm;
+  .clip-diagonal {
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
   }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .border-thin {
-    @apply border border-brand-beige;
+  .reveal-up {
+    animation: revealUp 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
   }
 }
 
-/* Mechanical Click Interaction */
-button:active {
-  transform: scale(0.98);
-  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+@keyframes revealUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
+
+/* Custom Scrollbar for Artisans */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--brand-paper); }
+::-webkit-scrollbar-thumb { background: var(--brand-black); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-gold); }

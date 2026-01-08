@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import FontCardV2 from '@/components/FontCardV2';
 import SmartSearch from '@/components/SmartSearch';
 import { AnalysisResult } from '@/types/ai';
-import { ChevronRight, Fingerprint, Activity, Layers } from 'lucide-react';
+import { Plus, Maximize2, Zap } from 'lucide-react';
 
-interface Font {
+interface FontAsset {
   id: string;
   name: string;
   foundry: string;
@@ -22,12 +21,22 @@ interface Font {
 }
 
 export default function Home() {
-  const [previewText, setPreviewText] = useState('');
-  const [allFreeFonts, setAllFreeFonts] = useState<Font[]>([]);
-  const [metrics, setMetrics] = useState({ minimalism: 70, authority: 50, legibility: 85 });
+  const [previewText, setPreviewText] = useState('UNLIMITED');
+  const [metrics, setMetrics] = useState({ minimalism: 88, authority: 42, legibility: 95 });
+  const [allFreeFonts, setAllFreeFonts] = useState<FontAsset[]>([]);
+
+  useEffect(() => {
+    const crawledData: FontAsset[] = [
+      { id: "694", name: "Pretendard", foundry: "Kil Hyeong-jin", license_type: "OFL", tags: ["Sans", "UI"], description: "The definitive UI standard.", preview_image: "https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png", source_url: "#" },
+      { id: "366", name: "Gmarket Sans", foundry: "Gmarket", license_type: "OFL", tags: ["Bold", "Impact"], description: "Command attention.", views: 1200000, source_url: "#" },
+      { id: "115", name: "Yeogi-Eottae", foundry: "Yeogi-Eottae", license_type: "OFL", tags: ["Display", "Brand"], description: "Unique brand personality.", views: 950000, source_url: "#" },
+      { id: "1456", name: "Paperlogy", foundry: "Lee Ju-im", license_type: "OFL", tags: ["Modern", "Work"], description: "Architectural precision in type.", views: 150000, source_url: "#" },
+    ];
+    setAllFreeFonts(crawledData);
+  }, []);
 
   const handleAnalysisComplete = (result: AnalysisResult) => {
-    console.log("Analysis Result:", result);
+    console.log("Artisan Analysis:", result.tone);
     setMetrics({
       minimalism: Math.floor(Math.random() * 40) + 60,
       authority: Math.floor(Math.random() * 50) + 30,
@@ -35,143 +44,133 @@ export default function Home() {
     });
   };
 
-  const handlePreviewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setPreviewText(val);
-    if (val.length > 0) {
-      setMetrics({
-        minimalism: Math.min(100, 60 + (val.length % 40)),
-        authority: Math.min(100, 40 + (val.length % 60)),
-        legibility: Math.min(100, 80 + (val.length % 20)),
-      });
-    }
-  };
-
-  useEffect(() => {
-    const crawledData: Font[] = [
-      { id: "694", name: "Pretendard", foundry: "Kil Hyeong-jin", license_type: "OFL", tags: ["Sans", "UI"], description: "The definitive UI standard.", views: 3710000, source_url: "#", preview_image: "https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png" },
-      { id: "1456", name: "Paperlogy", foundry: "Lee Ju-im", license_type: "OFL", tags: ["Modern", "Work"], description: "Architectural precision in type.", views: 150000, source_url: "#" },
-      { id: "366", name: "Gmarket Sans", foundry: "Gmarket", license_type: "OFL", tags: ["Bold", "Impact"], description: "Command attention.", views: 1200000, source_url: "#" },
-      { id: "115", name: "Yeogi Well-done", foundry: "Yeogi-Eottae", license_type: "OFL", tags: ["Display", "Brand"], description: "Unique brand personality.", views: 950000, source_url: "#" },
-      { id: "1663", name: "Mementeo", foundry: "Mementeo", license_type: "OFL", tags: ["Script", "Human"], description: "The warmth of human touch.", views: 80000, source_url: "#" },
-      { id: "37", name: "Nanum Square", foundry: "Naver", license_type: "OFL", tags: ["Clean", "Gothic"], description: "Reliable clarity.", views: 1500000, source_url: "#" },
-    ];
-    setAllFreeFonts(crawledData);
-  }, []);
-
   return (
-    <div className="min-h-screen bg-brand-paper text-brand-black pt-48 pb-60 overflow-hidden">
+    <div className="relative min-h-screen pt-60 pb-80">
       
-      <main className="max-w-[1800px] mx-auto px-8 md:px-16">
-        
-        {/* Atelier Header */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-20 mb-60 items-end">
-           <div className="lg:col-span-8">
-              <div className="flex items-center gap-4 mb-12">
-                 <Fingerprint className="w-6 h-6 text-brand-gold animate-pulse" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-gold">Intelligence Report / Vol. 26</span>
-              </div>
-              <h1 className="text-7xl md:text-[11vw] serif-title font-black tracking-[-0.04em] leading-[0.85] uppercase italic text-brand-black">
-                 Deciding<br/>
-                 <span className="text-brand-gold">Authority.</span>
-              </h1>
-           </div>
-           <div className="lg:col-span-4 border-l border-brand-black pt-12 pl-12">
-              <p className="text-lg font-medium text-brand-black/60 leading-relaxed mb-12">
-                 우리는 단순한 폰트 저장소를 거부합니다. 디자인 의도와 기술적 정밀함을 합성하여 브랜드의 영속적인 가치를 결정하는 디지털 아틀리에입니다.
-              </p>
-              <Link href="/enterprise" className="inline-flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-brand-black group border-b border-brand-black pb-2">
-                 GOVERNANCE SOLUTIONS <ChevronRight className="w-3 h-3 group-hover:translate-x-2 transition-transform" />
-              </Link>
-           </div>
-        </section>
+      {/* Background Hero Text */}
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full select-none pointer-events-none opacity-[0.02] mix-blend-multiply transition-all duration-1000 overflow-hidden whitespace-nowrap">
+         <span className="text-[40vw] font-black italic serif-display leading-none tracking-tighter text-brand-black">TYPOGRAPHY</span>
+      </div>
 
-        {/* Intelligence Layer */}
-        <section className="mb-60">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="bg-white border-thin p-12 rounded-[40px] shadow-2xl relative group">
-                 <div className="flex justify-between items-center mb-10">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-brand-gold">Vibe Consultant</h3>
-                    <Activity className="w-5 h-5 text-brand-black/20" />
-                 </div>
-                 <SmartSearch onAnalysisComplete={handleAnalysisComplete} />
+      <main className="max-w-[1800px] mx-auto px-10 md:px-20 relative z-10">
+        
+        {/* Hero */}
+        <section className="mb-80">
+           <div className="max-w-4xl">
+              <div className="flex items-center gap-4 mb-12">
+                 <div className="w-12 h-[1px] bg-brand-gold"></div>
+                 <span className="mono-label text-brand-gold">Crafting the visual decision</span>
               </div>
-              
-              <div className="bg-brand-black p-12 rounded-[40px] text-white shadow-2xl relative overflow-hidden">
-                 <div className="absolute top-0 right-0 w-64 h-64 bg-brand-gold/10 blur-[100px] rounded-full -mr-32 -mt-32"></div>
-                 <div className="flex justify-between items-center mb-10 relative z-10">
-                    <h3 className="text-xs font-black uppercase tracking-widest text-brand-gold">Type Specimen</h3>
-                    <div className="flex gap-6">
-                       <div className="text-center">
-                          <span className="block text-[8px] font-bold opacity-40 uppercase mb-1 tracking-tighter">Min</span>
-                          <span className="text-sm font-mono text-brand-gold">{metrics.minimalism}%</span>
+              <h1 className="text-8xl md:text-[14vw] serif-display font-black leading-[0.8] tracking-[-0.08em] mb-20 uppercase reveal-up text-brand-black">
+                 Form<br/>
+                 <span className="text-brand-gold flex items-center gap-10 italic">Follows <Plus className="w-[8vw] h-[8vw] stroke-[0.5] animate-spin-slow" /></span>
+                 Intent.
+              </h1>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+                 <p className="text-lg font-medium text-zinc-500 leading-relaxed max-w-sm">
+                    우리는 폰트를 나열하지 않습니다. 당신의 의도를 분석하여 브랜드의 영속적인 가치를 결정하는 시스템을 설계합니다.
+                 </p>
+                 <div className="flex flex-col justify-end items-end gap-4">
+                    <span className="mono-label text-zinc-300">Operational Stats v2.6</span>
+                    <div className="flex gap-10">
+                       <div className="text-right">
+                          <span className="mono-label block text-zinc-400">Assets</span>
+                          <span className="text-3xl font-black text-brand-black">50+</span>
                        </div>
-                       <div className="text-center">
-                          <span className="block text-[8px] font-bold opacity-40 uppercase mb-1 tracking-tighter">Aut</span>
-                          <span className="text-sm font-mono text-brand-gold">{metrics.authority}%</span>
+                       <div className="text-right">
+                          <span className="mono-label block text-zinc-400">Confidence</span>
+                          <span className="text-3xl font-black text-brand-black">90.2%</span>
                        </div>
                     </div>
                  </div>
-                 <input 
-                    type="text"
-                    placeholder="Visualize your intent..."
-                    className="w-full bg-transparent text-4xl md:text-6xl serif-title font-black focus:outline-none placeholder:text-white/10 italic relative z-10 tracking-tight"
-                    value={previewText}
-                    onChange={handlePreviewChange}
-                 />
               </div>
            </div>
         </section>
 
-        {/* The Exhibition (Product Grid) */}
-        <section className="mb-60">
-           <div className="flex justify-between items-end mb-24 border-b border-brand-black pb-12">
-              <h2 className="text-5xl serif-title font-black tracking-tighter uppercase italic flex items-center gap-6">
-                 Exhibition <Layers className="w-8 h-8 text-brand-gold" />
-              </h2>
-              <div className="flex gap-12 text-[10px] font-black uppercase tracking-[0.2em] text-brand-black/40">
-                 <button className="text-brand-black border-b-2 border-brand-black pb-2">All Assets</button>
-                 <button className="hover:text-brand-black transition-colors pb-2">Premium Only</button>
-                 <button className="hover:text-brand-black transition-colors pb-2">Latest Arrivals</button>
+        {/* Search */}
+        <section className="mb-80">
+           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 border-y border-brand-beige py-24">
+              <div className="lg:col-span-5">
+                 <h3 className="text-2xl font-black serif-display mb-8 text-brand-black">Consult with AI Intelligence</h3>
+                 <div className="bg-white p-2 rounded-[32px] border border-zinc-200 shadow-sm hover:shadow-2xl transition-all duration-700">
+                    <SmartSearch onAnalysisComplete={handleAnalysisComplete} />
+                 </div>
+              </div>
+              <div className="lg:col-span-7 bg-brand-black rounded-[40px] p-12 text-white relative overflow-hidden group">
+                 <div className="flex justify-between items-start mb-20 relative z-10">
+                    <div className="flex flex-col gap-2">
+                       <span className="mono-label text-brand-gold">Interactive Specimen</span>
+                       <h4 className="text-4xl font-black serif-display italic">{previewText}</h4>
+                    </div>
+                    <div className="flex gap-4">
+                       <button onClick={() => setPreviewText('DECISION')} className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all"><Maximize2 className="w-4 h-4" /></button>
+                       <button className="w-10 h-10 bg-brand-gold text-white rounded-full flex items-center justify-center"><Zap className="w-4 h-4 fill-current" /></button>
+                    </div>
+                 </div>
+                 
+                 <input 
+                    type="text"
+                    placeholder="ENTER INTENT..."
+                    className="w-full bg-transparent text-6xl md:text-[10vw] font-black focus:outline-none placeholder:text-white/5 reveal-up tracking-tighter uppercase italic"
+                    value={previewText}
+                    onChange={(e) => setPreviewText(e.target.value)}
+                 />
+
+                 <div className="mt-20 flex gap-12 relative z-10 border-t border-white/10 pt-8">
+                    <div className="flex items-center gap-4">
+                       <span className="mono-label opacity-40">MIN</span>
+                       <div className="w-32 h-[2px] bg-white/10 rounded-full overflow-hidden">
+                          <div className="h-full bg-brand-gold transition-all duration-1000" style={{ width: `${metrics.minimalism}%` }}></div>
+                       </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                       <span className="mono-label opacity-40">AUT</span>
+                       <div className="w-32 h-[2px] bg-white/10 rounded-full overflow-hidden">
+                          <div className="h-full bg-white transition-all duration-1000" style={{ width: `${metrics.authority}%` }}></div>
+                       </div>
+                    </div>
+                 </div>
               </div>
            </div>
+        </section>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-40">
+        {/* Gallery */}
+        <section>
+           <div className="flex justify-between items-end mb-32">
+              <div>
+                 <h2 className="text-6xl font-black serif-display tracking-tighter uppercase italic mb-4 text-brand-black">The Archive</h2>
+                 <p className="mono-label text-zinc-400">Section 01: Commercial Assets</p>
+              </div>
+              <Link href="/index" className="mono-label text-brand-gold border-b border-brand-gold pb-1 hover:text-brand-black hover:border-brand-black transition-all">View Index [01-50]</Link>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-60">
               {allFreeFonts.map((font, idx) => (
-                <div key={font.id} className={`${idx % 3 === 1 ? 'lg:translate-y-32' : idx % 3 === 2 ? 'lg:translate-y-16' : ''}`}>
-                   <FontCardV2 font={font} previewText={previewText} />
+                <div key={font.id} className={`${idx % 2 === 1 ? 'md:translate-y-40' : ''}`}>
+                   <div className="relative group">
+                      <div className="absolute -left-12 top-0 mono-label text-zinc-200 group-hover:text-brand-gold transition-colors duration-500">0{idx + 1}</div>
+                      <FontCardV2 font={font} previewText={previewText} />
+                   </div>
                 </div>
               ))}
            </div>
         </section>
 
-        {/* Premium Banner: The Masterpiece */}
-        <section className="mt-80">
-           <div className="relative h-[90vh] w-full border-thin overflow-hidden group bg-white">
-              <Image 
-                src="https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png" 
-                alt="Banner" 
-                fill 
-                className="object-contain p-20 transition-transform duration-[3000ms] group-hover:scale-110 opacity-80"
-                unoptimized
-              />
-              <div className="absolute inset-0 bg-brand-black/5 mix-blend-multiply"></div>
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-12">
-                 <span className="text-xs font-black uppercase tracking-[0.6em] mb-12 text-brand-gold">The Modern Masterpiece</span>
-                 <h2 className="text-8xl md:text-[14vw] serif-title font-black tracking-[-0.06em] uppercase italic leading-none text-brand-black mb-16">Pretendard</h2>
-                 <div className="flex flex-col md:flex-row gap-10">
-                    <Link href="/fonts/694" className="px-16 py-6 bg-brand-black text-white font-black text-xs uppercase tracking-[0.3em] hover:bg-brand-gold transition-all shadow-2xl">
-                       Inquire Asset
-                    </Link>
-                    <Link href="/market" className="px-16 py-6 border-thin bg-white text-brand-black font-black text-xs uppercase tracking-[0.3em] hover:bg-brand-black hover:text-white transition-all">
-                       View Inventory
-                    </Link>
-                 </div>
-              </div>
-           </div>
-        </section>
-
       </main>
+
+      <footer className="fixed bottom-0 left-0 w-full px-10 py-6 border-t border-brand-beige bg-brand-paper/80 backdrop-blur-sm z-[100] flex justify-between items-center select-none text-brand-black">
+         <div className="flex items-center gap-10">
+            <div className="flex items-center gap-2">
+               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+               <span className="mono-label">System Active</span>
+            </div>
+            <div className="hidden sm:flex gap-10">
+               <div className="flex items-center gap-2"><span className="mono-label opacity-30">GPU</span> <span className="mono-label">READY</span></div>
+               <div className="flex items-center gap-2"><span className="mono-label opacity-30">ENC</span> <span className="mono-label text-brand-gold">GEMINI-1.5-FLASH</span></div>
+            </div>
+         </div>
+         <div className="mono-label">© 2026 SENSE INTELLIGENCE. ALL RIGHTS RESERVED.</div>
+      </footer>
     </div>
   );
 }
