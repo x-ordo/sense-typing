@@ -3,141 +3,138 @@
 export const runtime = 'edge';
 
 import { useState } from 'react';
-import { Plus, GripVertical, CheckCircle2, FlaskConical, Lightbulb, Trash2, LucideIcon } from 'lucide-react';
+import { Plus, GripVertical, CheckCircle2, ShieldAlert, Clock, ExternalLink, Globe, Lock, LucideIcon } from 'lucide-react';
 
-interface Task {
+interface FontTask {
   id: string;
-  fontName: string;
-  project: string;
-  status: 'idea' | 'testing' | 'decided';
+  name: string;
+  source: string;
+  reporter: string;
+  licenseLink: string;
+  status: 'pending' | 'review' | 'published';
 }
 
-export default function KanbanPage() {
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: '1', fontName: 'Pretendard', project: 'Fintech App Redesign', status: 'decided' },
-    { id: '2', fontName: 'Gmarket Sans', project: 'Marketing Banner', status: 'testing' },
-    { id: '3', fontName: 'Nanum Myeongjo', project: 'Brand Story E-book', status: 'idea' },
+export default function AdminKanbanPage() {
+  const [tasks, setTasks] = useState<FontTask[]>([
+    { id: '1', name: '새로운 손글씨체', source: 'Google Form', reporter: 'park***@gmail.com', licenseLink: '#', status: 'pending' },
+    { id: '2', name: '기업 전용 서체 B', source: 'Crawler', reporter: 'System', licenseLink: '#', status: 'review' },
+    { id: '3', name: 'Pretendard', source: 'Direct', reporter: 'Admin', licenseLink: '#', status: 'published' },
   ]);
-
-  const [newTaskName, setNewTaskName] = useState('');
 
   const onDragStart = (e: React.DragEvent, id: string) => {
     e.dataTransfer.setData('taskId', id);
   };
 
-  const onDrop = (e: React.DragEvent, status: Task['status']) => {
+  const onDrop = (e: React.DragEvent, status: FontTask['status']) => {
     const id = e.dataTransfer.getData('taskId');
     const updatedTasks = tasks.map(t => t.id === id ? { ...t, status } : t);
     setTasks(updatedTasks);
   };
 
-  const addTask = (status: Task['status']) => {
-    if (!newTaskName.trim()) return;
-    const newTask: Task = {
-      id: Date.now().toString(),
-      fontName: newTaskName,
-      project: 'New Project',
-      status
-    };
-    setTasks([...tasks, newTask]);
-    setNewTaskName('');
-  };
-
-  const deleteTask = (id: string) => {
-    setTasks(tasks.filter(t => t.id !== id));
-  };
-
-  const columns: { id: Task['status']; title: string; icon: LucideIcon; color: string }[] = [
-    { id: 'idea', title: 'Font Ideas', icon: Lightbulb, color: 'text-amber-500' },
-    { id: 'testing', title: 'In Testing', icon: FlaskConical, color: 'text-indigo-500' },
-    { id: 'decided', title: 'Final Decided', icon: CheckCircle2, color: 'text-emerald-500' },
+  const columns: { id: FontTask['status']; title: string; icon: LucideIcon; color: string; bgColor: string }[] = [
+    { id: 'pending', title: 'New Submissions', icon: Clock, color: 'text-amber-600', bgColor: 'bg-amber-50' },
+    { id: 'review', title: 'License Review', icon: ShieldAlert, color: 'text-indigo-600', bgColor: 'bg-indigo-50' },
+    { id: 'published', title: 'Live on Store', icon: CheckCircle2, color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
   ];
 
   return (
-    <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-12">
-      <header className="mb-12 flex justify-between items-end">
-        <div>
-          <h1 className="text-4xl font-black tracking-tighter uppercase italic mb-2">Type Workflow</h1>
-          <p className="text-zinc-400 text-sm font-medium uppercase tracking-widest">Manage your typographic decisions</p>
-        </div>
-        <div className="flex bg-zinc-100 p-1 rounded-xl">
-           <input 
-             type="text" 
-             placeholder="Quick add font..." 
-             className="bg-transparent px-4 py-2 text-xs font-bold outline-none"
-             value={newTaskName}
-             onChange={(e) => setNewTaskName(e.target.value)}
-             onKeyDown={(e) => e.key === 'Enter' && addTask('idea')}
-           />
-           <button onClick={() => addTask('idea')} className="p-2 bg-zinc-900 text-white rounded-lg hover:bg-indigo-600 transition-colors">
-             <Plus className="w-4 h-4" />
-           </button>
-        </div>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {columns.map(col => (
-          <div 
-            key={col.id}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => onDrop(e, col.id)}
-            className="flex flex-col bg-zinc-50/50 border border-zinc-100 rounded-[2.5rem] p-6 min-h-[600px]"
-          >
-            <div className="flex items-center justify-between mb-8 px-2">
-              <div className="flex items-center gap-3">
-                <div className={`p-2 bg-white rounded-xl shadow-sm ${col.color}`}>
-                  <col.icon className="w-5 h-5" />
-                </div>
-                <h2 className="font-black uppercase tracking-tighter text-zinc-900">{col.title}</h2>
-              </div>
-              <span className="text-[10px] font-black bg-zinc-200 text-zinc-500 px-2 py-1 rounded-md">
-                {tasks.filter(t => t.status === col.id).length}
-              </span>
-            </div>
-
-            <div className="space-y-4">
-              {tasks.filter(t => t.status === col.id).map(task => (
-                <div
-                  key={task.id}
-                  draggable
-                  onDragStart={(e) => onDragStart(e, task.id)}
-                  className="group bg-white border border-zinc-200/60 p-5 rounded-2xl shadow-sm hover:shadow-xl hover:border-indigo-500/30 transition-all cursor-grab active:cursor-grabbing relative overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 w-1 h-full bg-zinc-100 group-hover:bg-indigo-500 transition-colors"></div>
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-sm font-black text-zinc-900 tracking-tight">{task.fontName}</h3>
-                    <button onClick={() => deleteTask(task.id)} className="opacity-0 group-hover:opacity-100 p-1 text-zinc-300 hover:text-red-500 transition-all">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                  <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider mb-4">{task.project}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex -space-x-2">
-                       {[1,2].map(i => (
-                         <div key={i} className="w-5 h-5 rounded-full bg-zinc-100 border-2 border-white flex items-center justify-center text-[8px] font-black text-zinc-400">U</div>
-                       ))}
-                    </div>
-                    <GripVertical className="w-4 h-4 text-zinc-200" />
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <button 
-              onClick={() => {
-                const name = prompt('Enter font name:');
-                if(name) {
-                  const newTask: Task = { id: Date.now().toString(), fontName: name, project: 'Manual Entry', status: col.id };
-                  setTasks([...tasks, newTask]);
-                }
-              }}
-              className="mt-6 w-full py-4 border-2 border-dashed border-zinc-200 rounded-2xl text-zinc-300 hover:border-indigo-500/30 hover:text-indigo-500 hover:bg-indigo-50/30 transition-all flex items-center justify-center gap-2 text-xs font-bold"
-            >
-              <Plus className="w-4 h-4" /> Drop or Click to Add
-            </button>
+    <div className="min-h-screen bg-[#F4F4F5] pb-20">
+      {/* Admin Header */}
+      <div className="bg-zinc-900 text-white py-4 px-6 md:px-12 flex justify-between items-center shadow-xl">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-red-500 rounded-lg">
+            <Lock className="w-4 h-4 text-white" />
           </div>
-        ))}
+          <h1 className="text-sm font-black uppercase tracking-[0.3em]">Sense Typing Admin <span className="text-zinc-500 font-medium">v2.4</span></h1>
+        </div>
+        <div className="flex items-center gap-6">
+           <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Master Mode</span>
+           <div className="w-8 h-8 rounded-full bg-indigo-600 border-2 border-zinc-700 flex items-center justify-center text-[10px] font-black">AD</div>
+        </div>
       </div>
+
+      <main className="max-w-[1600px] mx-auto px-6 md:px-12 py-12">
+        <header className="mb-12 flex justify-between items-end">
+          <div>
+            <h2 className="text-3xl font-black tracking-tighter uppercase italic text-zinc-900 mb-2">Font Pipeline</h2>
+            <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Manage newly reported fonts and database updates</p>
+          </div>
+          <button className="px-6 py-3 bg-zinc-900 text-white text-xs font-black rounded-xl hover:bg-indigo-600 transition-all flex items-center gap-2 shadow-lg shadow-zinc-200">
+            <Plus className="w-4 h-4" /> Add Manual Data
+          </button>
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {columns.map(col => (
+            <div 
+              key={col.id}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => onDrop(e, col.id)}
+              className={`${col.bgColor} border border-zinc-200/50 rounded-[2.5rem] p-6 min-h-[700px] shadow-inner`}
+            >
+              <div className="flex items-center justify-between mb-8 px-2">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 bg-white rounded-xl shadow-sm ${col.color}`}>
+                    <col.icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-black uppercase tracking-tighter text-zinc-900 text-sm">{col.title}</h3>
+                </div>
+                <span className="text-[10px] font-black bg-white/50 text-zinc-500 px-2.5 py-1 rounded-full border border-zinc-200">
+                  {tasks.filter(t => t.status === col.id).length}
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {tasks.filter(t => t.status === col.id).map(task => (
+                  <div
+                    key={task.id}
+                    draggable
+                    onDragStart={(e) => onDragStart(e, task.id)}
+                    className="group bg-white border border-zinc-200 p-6 rounded-3xl shadow-sm hover:shadow-2xl hover:border-indigo-500/30 transition-all cursor-grab active:cursor-grabbing"
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h4 className="text-sm font-black text-zinc-900 mb-1">{task.name}</h4>
+                        <div className="flex items-center gap-2">
+                           <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter bg-zinc-50 px-1.5 py-0.5 rounded">Via {task.source}</span>
+                        </div>
+                      </div>
+                      <div className="p-2 bg-zinc-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        <GripVertical className="w-4 h-4 text-zinc-300" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 mb-6">
+                       <div className="flex items-center gap-2 text-zinc-500">
+                          <Globe className="w-3 h-3" />
+                          <span className="text-[10px] font-medium truncate">{task.licenseLink}</span>
+                       </div>
+                       <div className="flex items-center gap-2 text-zinc-500">
+                          <Plus className="w-3 h-3" />
+                          <span className="text-[10px] font-medium">Reported by: {task.reporter}</span>
+                       </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                       <button className="flex-1 py-2 bg-zinc-100 text-zinc-600 text-[10px] font-black rounded-lg hover:bg-zinc-200 transition-all uppercase">Detail</button>
+                       <button className="p-2 bg-zinc-900 text-white rounded-lg hover:bg-indigo-600 transition-all">
+                          <ExternalLink className="w-3.5 h-3.5" />
+                       </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {col.id === 'pending' && (
+                <div className="mt-6 p-6 border-2 border-dashed border-zinc-300 rounded-3xl flex flex-col items-center justify-center gap-3 text-zinc-400 group hover:border-indigo-400 transition-all cursor-pointer">
+                   <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                   <span className="text-[10px] font-black uppercase tracking-widest">Process New Intake</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }
