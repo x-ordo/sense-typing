@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Command } from 'lucide-react'
+import { Search } from 'lucide-react'
 
 export default function Navbar() {
   return (
@@ -23,7 +23,7 @@ export default function Navbar() {
           
           <div className="group cursor-pointer">
             <div className="w-12 h-12 bg-brand-black text-white flex items-center justify-center rounded-full transition-transform duration-500 group-hover:scale-90 group-hover:bg-brand-gold">
-              <Command className="w-4 h-4" />
+              <Search className="w-4 h-4" />
             </div>
           </div>
         </div>
