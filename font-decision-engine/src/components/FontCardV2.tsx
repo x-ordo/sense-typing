@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Bookmark, ShieldCheck, Eye, ArrowRight } from 'lucide-react';
+import { Bookmark, CheckCircle, Eye } from 'lucide-react';
 import type { FontCardProps } from '@/types/font';
 
 export default function FontCardV2({ font, previewText }: { font: FontCardProps, previewText?: string }) {
@@ -43,81 +43,101 @@ export default function FontCardV2({ font, previewText }: { font: FontCardProps,
 
   return (
     <Link href={`/fonts/${font.id}`} className="group block">
-      <article className="relative bg-white border border-transparent group-hover:border-brand-beige transition-all duration-700 ease-out">
-        
+      <article className="relative bg-white border border-brand-beige hover:border-brand-gold/30 transition-all duration-300 rounded-lg overflow-hidden">
+
         {/* Specimen Area */}
-        <div className="aspect-[4/5] bg-zinc-50 overflow-hidden relative transition-all duration-1000 ease-in-out group-hover:bg-white">
-           {/* Technical Grid Overlay */}
-           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" 
-                style={{ backgroundImage: 'radial-gradient(circle, #b08d57 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }}>
-           </div>
+        <div className="aspect-[4/3] bg-zinc-50 relative overflow-hidden">
 
-           <div className="h-full flex items-center justify-center p-10 relative z-10">
-              {previewText ? (
-                <span className="text-4xl text-brand-black font-black break-all text-center leading-[0.9] tracking-tighter italic uppercase" style={{ fontFamily: 'serif' }}>
-                  {previewText}
-                </span>
-              ) : font.preview_image ? (
-                <Image 
-                  src={font.preview_image} 
-                  alt={font.name} 
-                  fill
-                  className="object-contain p-12 transition-transform duration-1000 group-hover:scale-110"
-                  unoptimized
-                />
-              ) : (
-                <span className="text-5xl font-black italic serif-display text-brand-black">{font.name}</span>
-              )}
-           </div>
-
-           {/* Price & Badge */}
-           <div className="absolute top-6 left-6 flex flex-col gap-2">
-             <div className="flex items-center gap-2 bg-brand-black text-white px-3 py-1 rounded-sm shadow-xl">
-                <span className="text-[10px] font-black uppercase tracking-widest">
-                  {isFree ? 'FREE' : `₩${font.price?.toLocaleString()}`}
-                </span>
-             </div>
-             <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-sm border ${isFree ? 'border-emerald-500 text-emerald-600' : 'border-brand-gold text-brand-gold'} bg-white/80 backdrop-blur text-[8px] font-black uppercase tracking-tighter`}>
-                <ShieldCheck className="w-2.5 h-2.5" /> 검증완료
-             </div>
-           </div>
-
-           {/* Hover CTA */}
-           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-              <div className="bg-brand-black text-white px-8 py-3 rounded-full flex items-center gap-3 transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">상세 보기</span>
-                 <ArrowRight className="w-3.5 h-3.5" />
-              </div>
-           </div>
-        </div>
-
-        {/* Product Info Area */}
-        <div className="pt-10 pb-8 px-6">
-          <div className="flex justify-between items-start mb-6">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-2xl font-black uppercase italic tracking-tighter text-brand-black group-hover:text-brand-gold transition-colors duration-500">
+          {/* Font Preview */}
+          <div className="absolute inset-0 flex items-center justify-center p-6">
+            {previewText ? (
+              <span className="text-xl text-brand-black font-semibold text-center leading-tight">
+                {previewText}
+              </span>
+            ) : font.preview_image ? (
+              <Image
+                src={font.preview_image}
+                alt={font.name}
+                fill
+                className="object-contain p-6"
+                unoptimized
+              />
+            ) : (
+              <span className="font-serif text-2xl text-brand-black italic">
                 {font.name}
-              </h3>
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{font.foundry}</span>
+              </span>
+            )}
+          </div>
+
+          {/* Top Badge Row */}
+          <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
+            <div className="flex flex-col gap-1">
+              {/* License Badge */}
+              <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide rounded ${
+                isFree
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  : 'bg-brand-gold/10 text-brand-gold border border-brand-gold/20'
+              }`}>
+                {isFree ? 'Free License' : `₩${font.price?.toLocaleString()}`}
+              </span>
+
+              {/* Verified Badge */}
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[8px] font-medium text-zinc-500 bg-white/80 backdrop-blur rounded border border-zinc-200">
+                <CheckCircle className="w-2.5 h-2.5 text-emerald-500" />
+                검증완료
+              </span>
             </div>
-            <button 
+
+            {/* Archive Button */}
+            <button
               onClick={toggleArchive}
-              className={`w-10 h-10 border border-zinc-100 flex items-center justify-center transition-all ${isArchived ? 'bg-brand-gold border-brand-gold text-white shadow-lg' : 'bg-white hover:bg-brand-black hover:text-white'}`}
+              className={`w-7 h-7 flex items-center justify-center rounded-full transition-all ${
+                isArchived
+                  ? 'bg-brand-gold text-white'
+                  : 'bg-white/80 backdrop-blur text-zinc-400 hover:text-brand-black border border-zinc-200'
+              }`}
             >
-              <Bookmark className={`w-4 h-4 ${isArchived ? 'fill-current' : ''}`} />
+              <Bookmark className={`w-3.5 h-3.5 ${isArchived ? 'fill-current' : ''}`} />
             </button>
           </div>
 
-          <div className="flex items-center justify-between pt-6 border-t border-zinc-100">
-             <div className="flex gap-4">
-                {(font.tags?.slice(0, 3) || ['인쇄', '웹', '영상']).map(tag => (
-                  <span key={tag} className="text-[9px] font-bold text-zinc-300 uppercase tracking-tighter">#{tag}</span>
-                ))}
-             </div>
-             <div className="flex items-center gap-2 text-zinc-400">
-                <Eye className="w-3 h-3" />
-                <span className="text-[9px] font-black">{font.views?.toLocaleString() || '1.2k'}</span>
-             </div>
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-brand-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="text-white text-xs font-medium tracking-wide uppercase">
+              상세 분석 보기
+            </span>
+          </div>
+        </div>
+
+        {/* Info Area */}
+        <div className="p-4 border-t border-zinc-100">
+          <div className="flex items-start justify-between gap-2 mb-3">
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold text-brand-black truncate group-hover:text-brand-gold transition-colors">
+                {font.name}
+              </h3>
+              <p className="text-[10px] text-zinc-400 truncate">
+                {font.foundry}
+              </p>
+            </div>
+            <div className="flex items-center gap-1 text-zinc-400 shrink-0">
+              <Eye className="w-3 h-3" />
+              <span className="text-[10px] font-medium">
+                {font.views?.toLocaleString() || '0'}
+              </span>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-1">
+            {(font.tags?.slice(0, 3) || []).map(tag => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 text-[9px] text-zinc-500 bg-zinc-100 rounded"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
       </article>
