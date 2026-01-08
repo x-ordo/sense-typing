@@ -1,38 +1,43 @@
 'use client'
 
 import Link from 'next/link'
-import { Search, Command } from 'lucide-react'
+import { Search, Command, ShoppingBag } from 'lucide-react'
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 z-[100] w-full px-6 py-8 pointer-events-none">
+    <nav className="fixed top-0 z-[100] w-full px-8 py-10 pointer-events-none">
       <div className="max-w-[1800px] mx-auto flex items-center justify-between pointer-events-auto">
-        {/* Brand Identity */}
-        <Link href="/" className="group flex items-center gap-3">
-          <div className="w-10 h-10 bg-zinc-900 rounded-full flex items-center justify-center group-hover:rotate-[180deg] transition-transform duration-700">
-            <span className="text-white text-xs font-black italic">S.</span>
+        
+        {/* Atelier Logo */}
+        <Link href="/" className="group flex items-center gap-4">
+          <div className="w-12 h-12 bg-brand-black flex items-center justify-center transition-all duration-700 group-hover:scale-95 group-hover:bg-brand-gold">
+            <span className="text-white text-lg serif-title font-black italic">S.</span>
           </div>
-          <span className="text-sm font-black tracking-[0.3em] uppercase hidden sm:block">Sense Intelligence</span>
+          <div className="flex flex-col">
+            <span className="text-xs font-black tracking-[0.4em] uppercase text-brand-black">Sense Intelligence</span>
+            <span className="text-[8px] font-bold tracking-[0.2em] text-brand-gold uppercase">Digital Atelier</span>
+          </div>
         </Link>
         
-        {/* Minimal Nav Center */}
-        <div className="glass px-8 py-3 rounded-full hidden md:flex items-center gap-10">
-          <Link href="/index" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-all uppercase tracking-[0.2em]">Discovery</Link>
-          <div className="w-1 h-1 bg-zinc-200 rounded-full"></div>
-          <Link href="/market" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-all uppercase tracking-[0.2em]">Archive</Link>
-          <div className="w-1 h-1 bg-zinc-200 rounded-full"></div>
-          <Link href="/kanban" className="text-[10px] font-black text-zinc-400 hover:text-zinc-900 transition-all uppercase tracking-[0.2em]">Workflow</Link>
+        {/* Sophisticated Menu */}
+        <div className="hidden lg:flex items-center gap-12 bg-white/80 backdrop-blur-2xl border-thin px-12 py-4 rounded-full shadow-sm">
+          <Link href="/index" className="text-[9px] font-black text-brand-black/40 hover:text-brand-black transition-all uppercase tracking-[0.3em]">Curated Archive</Link>
+          <div className="w-[1px] h-3 bg-brand-beige"></div>
+          <Link href="/market" className="text-[9px] font-black text-brand-black/40 hover:text-brand-black transition-all uppercase tracking-[0.3em]">Premium Assets</Link>
+          <div className="w-[1px] h-3 bg-brand-beige"></div>
+          <Link href="/enterprise" className="text-[9px] font-black text-brand-black/40 hover:text-brand-black transition-all uppercase tracking-[0.3em]">Governance</Link>
         </div>
 
-        {/* Action Right */}
-        <div className="flex items-center gap-4">
-          <div className="glass px-4 py-2 rounded-xl flex items-center gap-3 text-zinc-400 hover:border-zinc-400 transition-all cursor-pointer group">
-            <Search className="w-3.5 h-3.5 group-hover:text-zinc-900" />
-            <div className="flex items-center gap-1.5 border-l border-zinc-200 pl-3">
-               <Command className="w-3 h-3" />
-               <span className="text-[10px] font-bold">K</span>
-            </div>
+        {/* Global Utilities */}
+        <div className="flex items-center gap-6">
+          <div className="hidden sm:flex items-center gap-3 bg-brand-black px-6 py-3 rounded-full text-white cursor-pointer hover:bg-brand-gold transition-all duration-500">
+            <Search className="w-3.5 h-3.5" />
+            <span className="text-[10px] font-black uppercase tracking-widest">Consult AI</span>
           </div>
+          <button className="relative p-2 text-brand-black hover:text-brand-gold transition-colors">
+            <ShoppingBag className="w-5 h-5" />
+            <span className="absolute top-0 right-0 w-2 h-2 bg-brand-red rounded-full"></span>
+          </button>
         </div>
       </div>
     </nav>
