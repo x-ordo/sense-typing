@@ -1,11 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import FontCardV2 from '@/components/FontCardV2';
 import SmartSearch from '@/components/SmartSearch';
 import { createSupabaseBrowser } from '@/lib/supabase/fonts';
-import { AnalysisResult } from '@/types/ai';
 import { LayoutGrid, TrendingUp, Sparkles, SlidersHorizontal } from 'lucide-react';
 
 interface FontAsset {
@@ -39,7 +37,7 @@ export default function Home() {
     fetchFonts();
   }, []);
 
-  const handleAnalysisComplete = (result: AnalysisResult) => {
+  const handleAnalysisComplete = () => {
     setMetrics({
       minimalism: Math.floor(Math.random() * 40) + 60,
       authority: Math.floor(Math.random() * 50) + 30,
@@ -80,7 +78,7 @@ export default function Home() {
               <div className="lg:col-span-8 flex flex-col gap-6">
                  {/* Live Search & Test Integration */}
                  <div className="bg-white border border-brand-beige p-3 rounded-[32px] shadow-2xl hover:shadow-indigo-500/5 transition-all duration-700">
-                    <SmartSearch onAnalysisComplete={handleAnalysisComplete} />
+                    <SmartSearch onAnalysisComplete={() => handleAnalysisComplete()} />
                  </div>
                  
                  <div className="bg-brand-black rounded-[24px] p-6 text-white flex flex-col md:flex-row items-center gap-10">
