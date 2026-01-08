@@ -1,9 +1,10 @@
 // src/components/FontCardV2.tsx
 'use client'
 
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Printer, Globe, Video, Plus } from 'lucide-react';
+import { Printer, Globe, Video, Bookmark } from 'lucide-react';
 
 interface FontProps {
   id: string;
@@ -19,6 +20,32 @@ interface FontProps {
 
 export default function FontCardV2({ font, previewText }: { font: FontProps, previewText?: string }) {
   const isFree = !font.price || font.price === 0;
+  const [isArchived, setIsArchived] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('sense-archive');
+    if (saved) {
+      const archive = JSON.parse(saved);
+      setIsArchived(archive.includes(font.id));
+    }
+  }, [font.id]);
+
+  const toggleArchive = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const saved = localStorage.getItem('sense-archive');
+    let archive = saved ? JSON.parse(saved) : [];
+    
+    if (isArchived) {
+      archive = archive.filter((id: string) => id !== font.id);
+    } else {
+      archive.push(font.id);
+    }
+    
+    localStorage.setItem('sense-archive', JSON.stringify(archive));
+    setIsArchived(!isArchived);
+  };
 
   return (
     <Link href={`/fonts/${font.id}`} className="group block h-full">
@@ -45,13 +72,20 @@ export default function FontCardV2({ font, previewText }: { font: FontProps, pre
            )}
            
            {/* Price Tag Overlay */}
-           <div className="absolute top-5 left-5 z-10">
+           <div className="absolute top-5 left-5 z-10 flex gap-2">
              <span className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-sm ${isFree ? 'bg-emerald-500 text-white' : 'bg-zinc-900 text-white'}`}>
                {isFree ? 'FREE' : `₩${font.price?.toLocaleString()}`}
              </span>
            </div>
 
-           {/* Quick Action Overlay */}
+           {/* Archive Action */}
+           <button 
+             onClick={toggleArchive}
+             className={`absolute top-5 right-5 z-20 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 ${isArchived ? 'bg-indigo-600 text-white shadow-lg scale-110' : 'bg-white/80 backdrop-blur text-zinc-400 hover:text-indigo-600 hover:bg-white shadow-sm opacity-0 group-hover:opacity-100'}`}
+           >
+             <Bookmark className={`w-4 h-4 ${isArchived ? 'fill-current' : ''}`} />
+           </button>
+
            <div className="absolute inset-0 bg-indigo-600/0 group-hover:bg-indigo-600/5 transition-colors pointer-events-none"></div>
         </div>
 
@@ -61,9 +95,6 @@ export default function FontCardV2({ font, previewText }: { font: FontProps, pre
             <h3 className="text-lg font-black text-zinc-900 group-hover:text-indigo-600 transition-colors truncate tracking-tighter">
               {font.name}
             </h3>
-            <div className="w-8 h-8 bg-zinc-50 rounded-full flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
-               <Plus className="w-4 h-4" />
-            </div>
           </div>
           
           <p className="text-[10px] text-zinc-400 font-black uppercase tracking-widest mb-6">
