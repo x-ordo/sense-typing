@@ -4,28 +4,27 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import FontCardV2 from '@/components/FontCardV2';
 import SmartSearch from '@/components/SmartSearch';
-import { AnalysisResult } from '@/types/ai';
-import { Plus, Maximize2, Zap } from 'lucide-react';
-
 import { createSupabaseBrowser } from '@/lib/supabase/fonts';
+import { AnalysisResult } from '@/types/ai';
+import { LayoutGrid, TrendingUp, Sparkles, SlidersHorizontal } from 'lucide-react';
 
 interface FontAsset {
   id: string;
   name: string;
   foundry: string;
   license_type: string;
-  tags?: string[];
-  description?: string;
+  tags: string[];
+  description: string;
   preview_image?: string;
   views?: number;
-  source_url?: string;
+  source_url: string;
   price?: number;
 }
 
 export default function Home() {
-  const [previewText, setPreviewText] = useState('UNLIMITED');
-  const [metrics, setMetrics] = useState({ minimalism: 88, authority: 42, legibility: 95 });
+  const [previewText, setPreviewText] = useState('');
   const [allFreeFonts, setAllFreeFonts] = useState<FontAsset[]>([]);
+  const [metrics, setMetrics] = useState({ minimalism: 75, authority: 50, legibility: 90 });
 
   useEffect(() => {
     const fetchFonts = async () => {
@@ -33,20 +32,14 @@ export default function Home() {
       const { data, error } = await supabase
         .from('fonts')
         .select('*')
-        .limit(6);
+        .order('views', { ascending: false });
       
-      if (error) {
-        console.error("Supabase Error:", error);
-        return;
-      }
-      if (data) setAllFreeFonts(data);
+      if (!error && data) setAllFreeFonts(data);
     };
-
     fetchFonts();
   }, []);
 
   const handleAnalysisComplete = (result: AnalysisResult) => {
-    console.log("Artisan Analysis:", result.tone);
     setMetrics({
       minimalism: Math.floor(Math.random() * 40) + 60,
       authority: Math.floor(Math.random() * 50) + 30,
@@ -55,88 +48,60 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen pt-60 pb-80">
+    <div className="min-h-screen bg-brand-paper">
       
-      {/* Background Hero Text */}
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full select-none pointer-events-none opacity-[0.02] mix-blend-multiply transition-all duration-1000 overflow-hidden whitespace-nowrap">
-         <span className="text-[40vw] font-black italic serif-display leading-none tracking-tighter text-brand-black">TYPOGRAPHY</span>
+      {/* Dynamic Background Text (Artisan Touch) */}
+      <div className="fixed top-[20%] left-[-5%] text-[30vw] font-black text-zinc-950/[0.02] select-none pointer-events-none z-0 serif-display italic leading-none">
+        COLLECTION
       </div>
 
-      <main className="max-w-[1800px] mx-auto px-10 md:px-20 relative z-10">
+      <main className="max-w-[1800px] mx-auto px-8 md:px-16 pt-40 pb-40 relative z-10">
         
-        {/* Hero */}
-        <section className="mb-80">
-           <div className="max-w-4xl">
-              <div className="flex items-center gap-4 mb-12">
-                 <div className="w-12 h-[1px] bg-brand-gold"></div>
-                 <span className="mono-label text-brand-gold">Crafting the visual decision</span>
-              </div>
-              <h1 className="text-8xl md:text-[14vw] serif-display font-black leading-[0.8] tracking-[-0.08em] mb-20 uppercase reveal-up text-brand-black">
-                 Form<br/>
-                 <span className="text-brand-gold flex items-center gap-10 italic">Follows <Plus className="w-[8vw] h-[8vw] stroke-[0.5] animate-spin-slow" /></span>
-                 Intent.
-              </h1>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
-                 <p className="text-lg font-medium text-zinc-500 leading-relaxed max-w-sm">
-                    우리는 폰트를 나열하지 않습니다. 당신의 의도를 분석하여 브랜드의 영속적인 가치를 결정하는 시스템을 설계합니다.
+        {/* Market Header Utility */}
+        <section className="mb-24">
+           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+              <div className="lg:col-span-4">
+                 <h1 className="text-5xl md:text-7xl font-black tracking-tighter serif-display italic mb-6">Store.</h1>
+                 <p className="text-zinc-400 font-medium max-w-xs leading-relaxed text-sm mb-10">
+                    프로젝트의 가치를 결정하는 최상의 타이포그래피 자산을 실시간으로 탐색하십시오.
                  </p>
-                 <div className="flex flex-col justify-end items-end gap-4">
-                    <span className="mono-label text-zinc-300">Operational Stats v2.6</span>
-                    <div className="flex gap-10">
-                       <div className="text-right">
-                          <span className="mono-label block text-zinc-400">Assets</span>
-                          <span className="text-3xl font-black text-brand-black">50+</span>
-                       </div>
-                       <div className="text-right">
-                          <span className="mono-label block text-zinc-400">Confidence</span>
-                          <span className="text-3xl font-black text-brand-black">90.2%</span>
-                       </div>
+                 <div className="flex gap-4">
+                    <div className="px-4 py-2 border border-zinc-200 rounded-full flex items-center gap-2">
+                       <TrendingUp className="w-3 h-3 text-brand-gold" />
+                       <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">인기 급상승</span>
+                    </div>
+                    <div className="px-4 py-2 border border-zinc-200 rounded-full flex items-center gap-2">
+                       <Sparkles className="w-3 h-3 text-indigo-500" />
+                       <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">신규 도입</span>
                     </div>
                  </div>
               </div>
-           </div>
-        </section>
 
-        {/* Search */}
-        <section className="mb-80">
-           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 border-y border-brand-beige py-24">
-              <div className="lg:col-span-5">
-                 <h3 className="text-2xl font-black serif-display mb-8 text-brand-black">Consult with AI Intelligence</h3>
-                 <div className="bg-white p-2 rounded-[32px] border border-zinc-200 shadow-sm hover:shadow-2xl transition-all duration-700">
+              <div className="lg:col-span-8 flex flex-col gap-6">
+                 {/* Live Search & Test Integration */}
+                 <div className="bg-white border border-brand-beige p-3 rounded-[32px] shadow-2xl hover:shadow-indigo-500/5 transition-all duration-700">
                     <SmartSearch onAnalysisComplete={handleAnalysisComplete} />
                  </div>
-              </div>
-              <div className="lg:col-span-7 bg-brand-black rounded-[40px] p-12 text-white relative overflow-hidden group">
-                 <div className="flex justify-between items-start mb-20 relative z-10">
-                    <div className="flex flex-col gap-2">
-                       <span className="mono-label text-brand-gold">Interactive Specimen</span>
-                       <h4 className="text-4xl font-black serif-display italic">{previewText}</h4>
-                    </div>
-                    <div className="flex gap-4">
-                       <button onClick={() => setPreviewText('DECISION')} className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all"><Maximize2 className="w-4 h-4" /></button>
-                       <button className="w-10 h-10 bg-brand-gold text-white rounded-full flex items-center justify-center"><Zap className="w-4 h-4 fill-current" /></button>
-                    </div>
-                 </div>
                  
-                 <input 
-                    type="text"
-                    placeholder="ENTER INTENT..."
-                    className="w-full bg-transparent text-6xl md:text-[10vw] font-black focus:outline-none placeholder:text-white/5 reveal-up tracking-tighter uppercase italic"
-                    value={previewText}
-                    onChange={(e) => setPreviewText(e.target.value)}
-                 />
-
-                 <div className="mt-20 flex gap-12 relative z-10 border-t border-white/10 pt-8">
-                    <div className="flex items-center gap-4">
-                       <span className="mono-label opacity-40">MIN</span>
-                       <div className="w-32 h-[2px] bg-white/10 rounded-full overflow-hidden">
-                          <div className="h-full bg-brand-gold transition-all duration-1000" style={{ width: `${metrics.minimalism}%` }}></div>
-                       </div>
+                 <div className="bg-brand-black rounded-[24px] p-6 text-white flex flex-col md:flex-row items-center gap-10">
+                    <div className="flex-1 w-full">
+                       <span className="text-[8px] font-black uppercase tracking-[0.3em] text-brand-gold mb-3 block">Live Preview Tool</span>
+                       <input 
+                          type="text"
+                          placeholder="테스트할 문구를 입력하세요 (예: Sense Typing)"
+                          className="w-full bg-transparent text-2xl md:text-3xl font-bold focus:outline-none placeholder:text-zinc-800"
+                          value={previewText}
+                          onChange={(e) => setPreviewText(e.target.value)}
+                       />
                     </div>
-                    <div className="flex items-center gap-4">
-                       <span className="mono-label opacity-40">AUT</span>
-                       <div className="w-32 h-[2px] bg-white/10 rounded-full overflow-hidden">
-                          <div className="h-full bg-white transition-all duration-1000" style={{ width: `${metrics.authority}%` }}></div>
+                    <div className="flex gap-8 border-l border-zinc-800 pl-10 h-full py-2">
+                       <div className="text-center">
+                          <span className="block text-[8px] font-bold text-zinc-500 uppercase mb-1 tracking-tighter">Minimalism</span>
+                          <span className="text-lg font-mono text-brand-gold font-black">{metrics.minimalism}%</span>
+                       </div>
+                       <div className="text-center">
+                          <span className="block text-[8px] font-bold text-zinc-500 uppercase mb-1 tracking-tighter">Authority</span>
+                          <span className="text-lg font-mono text-white font-black">{metrics.authority}%</span>
                        </div>
                     </div>
                  </div>
@@ -144,42 +109,58 @@ export default function Home() {
            </div>
         </section>
 
-        {/* Gallery */}
+        {/* Product Grid: Inventory Exhibition */}
         <section>
-           <div className="flex justify-between items-end mb-32">
-              <div>
-                 <h2 className="text-6xl font-black serif-display tracking-tighter uppercase italic mb-4 text-brand-black">The Archive</h2>
-                 <p className="mono-label text-zinc-400">Section 01: Commercial Assets</p>
+           <div className="flex justify-between items-end mb-16 border-b border-zinc-200 pb-10">
+              <div className="flex items-center gap-6">
+                 <h2 className="text-4xl font-black serif-display italic uppercase">Inventory</h2>
+                 <div className="h-8 w-[1px] bg-zinc-200 hidden md:block"></div>
+                 <div className="hidden md:flex gap-10">
+                    {['전체', '산세리프', '세리프', '장식체'].map(cat => (
+                      <button key={cat} className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-brand-black transition-colors">{cat}</button>
+                    ))}
+                 </div>
               </div>
-              <Link href="/index" className="mono-label text-brand-gold border-b border-brand-gold pb-1 hover:text-brand-black hover:border-brand-black transition-all">View Index [01-50]</Link>
+              <button className="flex items-center gap-3 px-6 py-3 bg-zinc-50 border border-zinc-200 rounded-full hover:bg-brand-black hover:text-white transition-all">
+                 <SlidersHorizontal className="w-3.5 h-3.5" />
+                 <span className="text-[10px] font-black uppercase tracking-widest">상세 필터</span>
+              </button>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-60">
-              {allFreeFonts.map((font, idx) => (
-                <div key={font.id} className={`${idx % 2 === 1 ? 'md:translate-y-40' : ''}`}>
-                   <div className="relative group">
-                      <div className="absolute -left-12 top-0 mono-label text-zinc-200 group-hover:text-brand-gold transition-colors duration-500">0{idx + 1}</div>
-                      <FontCardV2 font={font} previewText={previewText} />
-                   </div>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-32">
+              {allFreeFonts.length > 0 ? (
+                allFreeFonts.map((font, idx) => (
+                  <div key={font.id} className={`${idx % 3 === 1 ? 'lg:translate-y-24' : idx % 3 === 2 ? 'lg:translate-y-12' : ''}`}>
+                     <div className="relative group">
+                        <div className="absolute -left-10 top-0 text-[10px] font-black text-zinc-200 group-hover:text-brand-gold transition-colors duration-500">0{idx + 1}</div>
+                        <FontCardV2 font={font} previewText={previewText} />
+                     </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full py-40 flex flex-col items-center opacity-20">
+                   <LayoutGrid className="w-20 h-20 mb-8 animate-pulse" />
+                   <span className="text-xs font-black uppercase tracking-[0.5em]">Inventory Loading...</span>
                 </div>
-              ))}
+              )}
            </div>
         </section>
 
       </main>
 
-      <footer className="fixed bottom-0 left-0 w-full px-10 py-6 border-t border-brand-beige bg-brand-paper/80 backdrop-blur-sm z-[100] flex justify-between items-center select-none text-brand-black">
+      {/* Artisan Status Bar (Localized) */}
+      <footer className="fixed bottom-0 left-0 w-full px-10 py-6 border-t border-brand-beige bg-white/80 backdrop-blur-sm z-[100] flex justify-between items-center text-brand-black">
          <div className="flex items-center gap-10">
-            <div className="flex items-center gap-2">
-               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-               <span className="mono-label">System Active</span>
+            <div className="flex items-center gap-3">
+               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+               <span className="text-[9px] font-black uppercase tracking-widest">시스템 정상 가동 중</span>
             </div>
-            <div className="hidden sm:flex gap-10">
-               <div className="flex items-center gap-2"><span className="mono-label opacity-30">GPU</span> <span className="mono-label">READY</span></div>
-               <div className="flex items-center gap-2"><span className="mono-label opacity-30">ENC</span> <span className="mono-label text-brand-gold">GEMINI-1.5-FLASH</span></div>
+            <div className="hidden sm:flex gap-10 border-l border-zinc-100 pl-10">
+               <div className="flex items-center gap-2"><span className="text-[8px] font-bold text-zinc-300 uppercase">분석엔진</span> <span className="text-[9px] font-black text-brand-gold">GEMINI-1.5-FLASH</span></div>
+               <div className="flex items-center gap-2"><span className="text-[8px] font-bold text-zinc-300 uppercase">데이터</span> <span className="text-[9px] font-black">SUPABASE REAL-TIME</span></div>
             </div>
          </div>
-         <div className="mono-label">© 2026 SENSE INTELLIGENCE. ALL RIGHTS RESERVED.</div>
+         <div className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-300">© 2026 SENSE TYPING. ALL RIGHTS RESERVED.</div>
       </footer>
     </div>
   );
