@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, Printer, Globe, Video, Laptop, Package, Briefcase } from 'lucide-react';
+import { Printer, Globe, Video, Plus } from 'lucide-react';
 
 interface FontProps {
   id: string;
@@ -14,28 +14,20 @@ interface FontProps {
   tags?: string[];
   description?: string;
   views?: number;
+  price?: number;
 }
 
 export default function FontCardV2({ font, previewText }: { font: FontProps, previewText?: string }) {
-  const licenseIcons = [
-    { icon: Printer, label: '인쇄' },
-    { icon: Globe, label: '웹' },
-    { icon: Video, label: '영상' },
-    { icon: Laptop, label: '임베딩' },
-    { icon: Package, label: '포장지' },
-    { icon: Briefcase, label: 'BI/CI' },
-  ];
+  const isFree = !font.price || font.price === 0;
 
   return (
     <Link href={`/fonts/${font.id}`} className="group block h-full">
-      <article className="h-full flex flex-col bg-zinc-50/50 border border-zinc-200/60 transition-all duration-500 hover:border-indigo-500/50 hover:shadow-[0_20px_50px_rgba(79,70,229,0.1)] rounded-3xl overflow-hidden relative">
+      <article className="h-full flex flex-col bg-white border border-zinc-100 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 rounded-xl overflow-hidden relative">
         
-        {/* Preview Area - Abstract background on hover */}
-        <div className="aspect-[16/10] w-full bg-white flex items-center justify-center p-8 overflow-hidden relative">
-           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-           
+        {/* Product Image Area */}
+        <div className="aspect-[4/3] w-full bg-zinc-50 flex items-center justify-center overflow-hidden relative border-b border-zinc-50">
            {previewText ? (
-             <span className="text-3xl text-zinc-900 font-medium break-all text-center px-4 relative z-10" style={{ fontFamily: 'sans-serif' }}>
+             <span className="text-2xl text-zinc-900 font-medium break-all text-center px-6 relative z-10" style={{ fontFamily: 'sans-serif' }}>
                {previewText}
              </span>
            ) : font.preview_image ? (
@@ -43,50 +35,50 @@ export default function FontCardV2({ font, previewText }: { font: FontProps, pre
                src={font.preview_image} 
                alt={`${font.name} preview`} 
                fill
-               className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
+               className="object-cover opacity-90 group-hover:scale-110 transition-all duration-700"
                unoptimized
              />
            ) : (
-             <span className="text-4xl text-zinc-800 font-bold tracking-tight relative z-10" style={{ fontFamily: 'sans-serif' }}>
+             <span className="text-3xl text-zinc-800 font-bold tracking-tight" style={{ fontFamily: 'sans-serif' }}>
                {font.name}
              </span>
            )}
            
+           {/* Price Tag Overlay */}
            <div className="absolute top-4 left-4 z-10">
-             <span className="px-2 py-1 bg-zinc-900 text-white text-[8px] font-black uppercase tracking-widest rounded-md">
-               {font.license_type}
+             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${isFree ? 'bg-emerald-500 text-white' : 'bg-zinc-900 text-white'}`}>
+               {isFree ? 'FREE' : `₩${font.price?.toLocaleString()}`}
              </span>
+           </div>
+
+           {/* Quick Add Action (Mall style) */}
+           <div className="absolute bottom-4 right-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+              <div className="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-xl">
+                 <Plus className="w-5 h-5" />
+              </div>
            </div>
         </div>
 
-        {/* Info Area */}
-        <div className="p-6 flex flex-col flex-grow bg-white/40 backdrop-blur-sm">
-          <div className="flex justify-between items-start mb-1">
-            <h3 className="text-xl font-black text-zinc-900 group-hover:text-indigo-600 transition-colors tracking-tighter">
+        {/* Product Info Area */}
+        <div className="p-5 flex flex-col flex-grow">
+          <div className="flex justify-between items-center mb-1">
+            <h3 className="text-base font-bold text-zinc-900 group-hover:text-indigo-600 transition-colors truncate">
               {font.name}
             </h3>
-            <ExternalLink className="w-4 h-4 text-zinc-300 group-hover:text-indigo-500 transition-colors" />
+            <span className="text-[10px] text-zinc-400 font-medium">{font.license_type}</span>
           </div>
           
-          <p className="text-[10px] text-zinc-400 uppercase font-black tracking-widest mb-4">
+          <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider mb-4">
             {font.foundry}
           </p>
 
-          <div className="flex gap-2 mb-6">
-             {licenseIcons.map((item, idx) => (
-               <div key={idx} className="w-7 h-7 flex items-center justify-center rounded-full bg-zinc-100 text-zinc-400 group-hover:bg-indigo-50 group-hover:text-indigo-500 transition-all duration-300" title={item.label}>
-                 <item.icon className="w-3.5 h-3.5" />
-               </div>
-             ))}
-          </div>
-
-          {/* Tags - Pill style */}
-          <div className="mt-auto flex flex-wrap gap-1.5">
-            {font.tags?.slice(0, 3).map((tag, i) => (
-              <span key={i} className="inline-block px-2.5 py-1 bg-zinc-100 text-zinc-500 text-[9px] font-bold rounded-full group-hover:bg-zinc-900 group-hover:text-white transition-colors uppercase tracking-tight">
-                {tag}
-              </span>
-            ))}
+          <div className="mt-auto flex items-center justify-between pt-4 border-t border-zinc-50">
+            <div className="flex gap-1">
+               {[Printer, Globe, Video].map((Icon, idx) => (
+                 <Icon key={idx} className="w-3 h-3 text-zinc-300" />
+               ))}
+            </div>
+            <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest group-hover:underline">View Detail</span>
           </div>
         </div>
       </article>
