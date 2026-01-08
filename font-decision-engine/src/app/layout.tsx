@@ -30,7 +30,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-zinc-900`}
       >
-        <div className="fixed inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none"></div>
+        {/* Subtle grid pattern background */}
+        <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #18181b 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
         <Navbar />
         <main className="min-h-screen relative">
           <ErrorBoundary>

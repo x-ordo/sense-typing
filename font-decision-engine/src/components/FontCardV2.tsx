@@ -5,40 +5,40 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Bookmark, ShieldCheck, Eye, ArrowRight } from 'lucide-react';
+import type { FontCardProps } from '@/types/font';
 
-interface FontProps {
-  id: string;
-  name: string;
-  foundry: string;
-  preview_image?: string;
-  license_type: string;
-  tags?: string[];
-  description?: string;
-  views?: number;
-  price?: number;
-}
-
-export default function FontCardV2({ font, previewText }: { font: FontProps, previewText?: string }) {
+export default function FontCardV2({ font, previewText }: { font: FontCardProps, previewText?: string }) {
   const isFree = !font.price || font.price === 0;
   const [isArchived, setIsArchived] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('sense-archive');
-    if (saved) {
-      const archive = JSON.parse(saved);
-      setIsArchived(archive.includes(font.id));
+    try {
+      const saved = localStorage.getItem('sense-archive');
+      if (saved) {
+        const archive = JSON.parse(saved) as string[];
+        setIsArchived(archive.includes(font.id));
+      }
+    } catch {
+      // localStorage may be unavailable in private browsing
     }
   }, [font.id]);
 
   const toggleArchive = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const saved = localStorage.getItem('sense-archive');
-    let archive = saved ? JSON.parse(saved) : [];
-    if (isArchived) archive = archive.filter((id: string) => id !== font.id);
-    else archive.push(font.id);
-    localStorage.setItem('sense-archive', JSON.stringify(archive));
-    setIsArchived(!isArchived);
+    try {
+      const saved = localStorage.getItem('sense-archive');
+      let archive: string[] = saved ? JSON.parse(saved) : [];
+      if (isArchived) {
+        archive = archive.filter((id) => id !== font.id);
+      } else {
+        archive.push(font.id);
+      }
+      localStorage.setItem('sense-archive', JSON.stringify(archive));
+      setIsArchived(!isArchived);
+    } catch {
+      // localStorage may be unavailable in private browsing
+    }
   };
 
   return (
@@ -110,7 +110,7 @@ export default function FontCardV2({ font, previewText }: { font: FontProps, pre
 
           <div className="flex items-center justify-between pt-6 border-t border-zinc-100">
              <div className="flex gap-4">
-                {['인쇄', '웹', '영상'].map(tag => (
+                {(font.tags?.slice(0, 3) || ['인쇄', '웹', '영상']).map(tag => (
                   <span key={tag} className="text-[9px] font-bold text-zinc-300 uppercase tracking-tighter">#{tag}</span>
                 ))}
              </div>

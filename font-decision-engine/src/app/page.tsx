@@ -2,37 +2,36 @@
 
 import { useState, useEffect } from 'react';
 import FontCardV2 from '@/components/FontCardV2';
+import FontCardSkeleton from '@/components/FontCardSkeleton';
 import SmartSearch from '@/components/SmartSearch';
 import { createSupabaseBrowser } from '@/lib/supabase/fonts';
-import { LayoutGrid, TrendingUp, Sparkles, SlidersHorizontal } from 'lucide-react';
-
-interface FontAsset {
-  id: string;
-  name: string;
-  foundry: string;
-  license_type: string;
-  tags: string[];
-  description: string;
-  preview_image?: string;
-  views?: number;
-  source_url: string;
-  price?: number;
-}
+import { TrendingUp, Sparkles, SlidersHorizontal } from 'lucide-react';
+import type { FontCardProps } from '@/types/font';
 
 export default function Home() {
   const [previewText, setPreviewText] = useState('');
-  const [allFreeFonts, setAllFreeFonts] = useState<FontAsset[]>([]);
+  const [allFreeFonts, setAllFreeFonts] = useState<FontCardProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [metrics, setMetrics] = useState({ minimalism: 75, authority: 50, legibility: 90 });
 
   useEffect(() => {
     const fetchFonts = async () => {
-      const supabase = createSupabaseBrowser();
-      const { data, error } = await supabase
-        .from('fonts')
-        .select('*')
-        .order('views', { ascending: false });
-      
-      if (!error && data) setAllFreeFonts(data);
+      setIsLoading(true);
+      try {
+        const supabase = createSupabaseBrowser();
+        const { data, error } = await supabase
+          .from('fonts')
+          .select('*')
+          .order('views', { ascending: false });
+
+        if (!error && data) {
+          setAllFreeFonts(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch fonts:', err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchFonts();
   }, []);
@@ -126,7 +125,17 @@ export default function Home() {
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-32">
-              {allFreeFonts.length > 0 ? (
+              {isLoading ? (
+                // Skeleton loading state
+                Array.from({ length: 6 }).map((_, idx) => (
+                  <div key={idx} className={`${idx % 3 === 1 ? 'lg:translate-y-24' : idx % 3 === 2 ? 'lg:translate-y-12' : ''}`}>
+                    <div className="relative">
+                      <div className="absolute -left-10 top-0 text-[10px] font-black text-zinc-200">0{idx + 1}</div>
+                      <FontCardSkeleton />
+                    </div>
+                  </div>
+                ))
+              ) : allFreeFonts.length > 0 ? (
                 allFreeFonts.map((font, idx) => (
                   <div key={font.id} className={`${idx % 3 === 1 ? 'lg:translate-y-24' : idx % 3 === 2 ? 'lg:translate-y-12' : ''}`}>
                      <div className="relative group">
@@ -136,9 +145,8 @@ export default function Home() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-full py-40 flex flex-col items-center opacity-20">
-                   <LayoutGrid className="w-20 h-20 mb-8 animate-pulse" />
-                   <span className="text-xs font-black uppercase tracking-[0.5em]">Inventory Loading...</span>
+                <div className="col-span-full py-40 flex flex-col items-center">
+                   <p className="text-zinc-400 text-sm">데이터베이스에 연결할 수 없습니다.</p>
                 </div>
               )}
            </div>

@@ -11,6 +11,7 @@ export function logTelemetry(event: TelemetryEvent, metadata?: Record<string, un
     
     const timestamp = new Date().toISOString();
     
+    // eslint-disable-next-line no-console -- Intentional telemetry logging
     console.log(`[SenseTyping Telemetry]`, JSON.stringify({
         timestamp,
         event,
