@@ -16,7 +16,19 @@
 | 팀원마다 사용하는 서체가 달라 브랜드가 파편화됨 | **Admin Pipeline**을 통한 조직 전용 '승인된 폰트' 리스트 운영 |
 | 폰트 구매 비용 및 옵션 계산이 복잡함 | **Market Simulator**를 통해 용도별 비용 즉시 산출 및 라이선스 구매 |
 
-## 4. Revenue Model (수익 모델)
+## 4. GTM Assets (Sales Enablement)
+
+### 4.1. Pitch Deck Structure
+1. **The Typographic Gap:** 브랜드 일관성이 무너지는 실태 고발.
+2. **AI-Powered Solution:** Sense Typing의 지능형 매칭 기술 소개.
+3. **Risk Mitigation:** 라이선스 사고 제로를 보장하는 관리 프로세스.
+4. **ROI Case Study:** 폰트 결정 시간 90% 단축 사례.
+
+### 4.2. Objection Handling (반론 처리)
+- **Q:** "이미 무료 폰트가 많은데 왜 돈을 써야 하나요?"
+- **A:** "무료 폰트의 '숨은 독소 조항'으로 인한 법적 리스크 비용은 수천만 원에 달합니다. 저희는 그 리스크를 제거하는 보험이자 지능입니다."
+
+## 5. Revenue Model (수익 모델)
 1. **Premium License Fee:** 개인/기업별 유료 폰트 단건 판매 수수료.
 2. **Subscription (SaaS):** 기업용 중앙 관리 대시보드 및 AI 고급 분석 기능 구독.
 3. **Featured Placement:** 신규 폰트 제작사 대상의 상단 노출 광고 모델.
