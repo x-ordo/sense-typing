@@ -5,6 +5,7 @@ import FontCardV2 from '@/components/FontCardV2';
 import FontCardSkeleton from '@/components/FontCardSkeleton';
 import SmartSearch from '@/components/SmartSearch';
 import { createSupabaseBrowser } from '@/lib/supabase/fonts';
+import { MOCK_FONTS, shouldUseMockData } from '@/lib/mock-data';
 import { TrendingUp, Sparkles, SlidersHorizontal } from 'lucide-react';
 import type { FontCardProps } from '@/types/font';
 
@@ -12,11 +13,21 @@ export default function Home() {
   const [previewText, setPreviewText] = useState('');
   const [allFreeFonts, setAllFreeFonts] = useState<FontCardProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMockData, setIsMockData] = useState(false);
   const [metrics, setMetrics] = useState({ minimalism: 75, authority: 50, legibility: 90 });
 
   useEffect(() => {
     const fetchFonts = async () => {
       setIsLoading(true);
+
+      // Use mock data if Supabase is not configured
+      if (shouldUseMockData()) {
+        setAllFreeFonts(MOCK_FONTS);
+        setIsMockData(true);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const supabase = createSupabaseBrowser();
         const { data, error } = await supabase
@@ -24,11 +35,18 @@ export default function Home() {
           .select('*')
           .order('views', { ascending: false });
 
-        if (!error && data) {
+        if (!error && data && data.length > 0) {
           setAllFreeFonts(data);
+        } else {
+          // Fallback to mock data if no results
+          setAllFreeFonts(MOCK_FONTS);
+          setIsMockData(true);
         }
       } catch (err) {
         console.error('Failed to fetch fonts:', err);
+        // Fallback to mock data on error
+        setAllFreeFonts(MOCK_FONTS);
+        setIsMockData(true);
       } finally {
         setIsLoading(false);
       }
@@ -163,7 +181,12 @@ export default function Home() {
             </div>
             <div className="hidden sm:flex gap-10 border-l border-zinc-100 pl-10">
                <div className="flex items-center gap-2"><span className="text-[8px] font-bold text-zinc-300 uppercase">분석엔진</span> <span className="text-[9px] font-black text-brand-gold">GEMINI-1.5-FLASH</span></div>
-               <div className="flex items-center gap-2"><span className="text-[8px] font-bold text-zinc-300 uppercase">데이터</span> <span className="text-[9px] font-black">SUPABASE REAL-TIME</span></div>
+               <div className="flex items-center gap-2">
+                 <span className="text-[8px] font-bold text-zinc-300 uppercase">데이터</span>
+                 <span className={`text-[9px] font-black ${isMockData ? 'text-amber-500' : ''}`}>
+                   {isMockData ? 'MOCK DATA (DEV)' : 'SUPABASE REAL-TIME'}
+                 </span>
+               </div>
             </div>
          </div>
          <div className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-300">© 2026 SENSE TYPING. ALL RIGHTS RESERVED.</div>
