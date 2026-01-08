@@ -2,6 +2,7 @@ export const runtime = 'edge';
 
 import { Check, AlertTriangle, ExternalLink } from 'lucide-react';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { getFontBySlug } from '@/lib/supabase/server-fonts';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -23,12 +24,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function FontDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const font = await getFontBySlug(slug);
+  let font = null;
+  
+  try {
+    font = await getFontBySlug(slug);
+  } catch (err) {
+    console.error("Failed to fetch font data:", err);
+  }
 
   if (!font) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <h1 className="text-2xl font-black text-brand-black">ASSET NOT FOUND.</h1>
+      <div className="min-h-screen bg-brand-paper flex flex-col items-center justify-center p-10 text-center">
+        <h1 className="text-4xl font-black text-brand-black mb-4 serif-display italic">ASSET UNAVAILABLE.</h1>
+        <p className="text-zinc-400 mb-10">데이터베이스 연결 확인 또는 유효하지 않은 자산 ID입니다.</p>
+        <Link href="/" className="px-10 py-4 bg-brand-black text-white font-black text-xs uppercase tracking-widest rounded-full hover:bg-brand-gold transition-all">
+           Return to Inventory
+        </Link>
       </div>
     );
   }
