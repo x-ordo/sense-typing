@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import FontCardV2 from '@/components/FontCardV2';
-import { Search, ShoppingCart, Zap, Flame } from 'lucide-react';
 import SmartSearch from '@/components/SmartSearch';
 import { AnalysisResult } from '@/types/ai';
+import { ChevronRight, Activity } from 'lucide-react';
 
 interface Font {
   id: string;
@@ -24,127 +24,142 @@ interface Font {
 export default function Home() {
   const [previewText, setPreviewText] = useState('');
   const [allFreeFonts, setAllFreeFonts] = useState<Font[]>([]);
-  const [aiResult, setAiResult] = useState<AnalysisResult | null>(null);
+  const [metrics, setMetrics] = useState({ minimalism: 70, authority: 50, legibility: 85 });
 
   const handleAnalysisComplete = (result: AnalysisResult) => {
-    setAiResult(result);
+    // Optionally use result.tone or other data to update UI
+    console.log("Analysis Result:", result);
+    setMetrics({
+      minimalism: Math.floor(Math.random() * 40) + 60,
+      authority: Math.floor(Math.random() * 50) + 30,
+      legibility: Math.floor(Math.random() * 20) + 80,
+    });
+  };
+
+  const handlePreviewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setPreviewText(val);
+    if (val.length > 0) {
+      setMetrics({
+        minimalism: Math.min(100, 60 + (val.length % 40)),
+        authority: Math.min(100, 40 + (val.length % 60)),
+        legibility: Math.min(100, 80 + (val.length % 20)),
+      });
+    }
   };
 
   useEffect(() => {
     const crawledData: Font[] = [
-      { id: "694", name: "Pretendard", foundry: "길형진 (orioncactus)", license_type: "OFL", tags: ["고딕", "UI", "본문"], description: "가장 대중적인 본문용 고딕체", views: 3710000, source_url: "#", preview_image: "https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png" },
-      { id: "366", name: "Gmarket Sans", foundry: "Gmarket", license_type: "OFL", tags: ["고딕", "제목", "임팩트"], description: "강력한 제목용 산세리프", views: 1200000, source_url: "#", price: 0 },
-      { id: "115", name: "Yeogi-Eottae", foundry: "여기어때", license_type: "OFL", tags: ["장식체", "브랜드"], description: "쓰면 쓸수록 매력만점 잘난체", views: 950000, source_url: "#" },
-      { id: "37", name: "Nanum Square", foundry: "Naver", license_type: "OFL", tags: ["고딕", "네이버"], description: "너도 떠나보면 나를 알게 될거야", views: 1500000, source_url: "#" },
-      { id: "1456", name: "Paperlogy", foundry: "이주임 X 김도균", license_type: "OFL", tags: ["고딕", "협업"], description: "멋진 한글 폰트와 영문 폰트의 COLLABO", views: 150000, source_url: "#" },
-      { id: "1663", name: "Mementeo", foundry: "메모먼트", license_type: "OFL", tags: ["손글씨", "귀여운"], description: "길바닥에 찍힌 귀여운 고양이 발바닥", views: 80000, source_url: "#" },
-      { id: "33", name: "KoPub Dotum", foundry: "한국출판인회의", license_type: "OFL", tags: ["고딕", "본문"], description: "출판 업계 표준 고딕체", views: 800000, source_url: "#" },
-      { id: "34", name: "Noto Sans KR", foundry: "Google", license_type: "OFL", tags: ["고딕", "글로벌"], description: "전 세계적으로 가장 널리 쓰이는 고딕", views: 2500000, source_url: "#" },
-      { id: "1541", name: "Ongleip Park", foundry: "온글잎", license_type: "OFL", tags: ["손글씨", "감성"], description: "안녕 나의 작고 소중한 고양이", views: 628000, source_url: "#" },
+      { id: "694", name: "Pretendard", foundry: "Kil Hyeong-jin", license_type: "OFL", tags: ["Sans", "UI"], description: "Standard for modern interfaces", views: 3710000, source_url: "#", preview_image: "https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png" },
+      { id: "366", name: "Gmarket Sans", foundry: "Gmarket", license_type: "OFL", tags: ["Bold", "Display"], description: "Impactful headlines", views: 1200000, source_url: "#", price: 0 },
+      { id: "115", name: "Yeogi-Eottae", foundry: "Yeogi-Eottae", license_type: "OFL", tags: ["Display", "Brand"], description: "Unique and characteristic", views: 950000, source_url: "#" },
+      { id: "37", name: "Nanum Square", foundry: "Naver", license_type: "OFL", tags: ["Sans", "Clean"], description: "Timeless classic", views: 1500000, source_url: "#" },
+      { id: "1456", name: "Paperlogy", foundry: "Lee Ju-im", license_type: "OFL", tags: ["Modern", "Work"], description: "Collaboration focus", views: 150000, source_url: "#" },
+      { id: "1663", name: "Mementeo", foundry: "Mementeo", license_type: "OFL", tags: ["Script", "Soft"], description: "Emotional handwriting", views: 80000, source_url: "#" },
     ];
     setAllFreeFonts(crawledData);
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-indigo-500 selection:text-white pb-20">
+    <div className="min-h-screen text-zinc-950 font-sans selection:bg-indigo-600 selection:text-white pt-32 pb-40 overflow-hidden">
       
-      {/* 1. Market Header Utility */}
-      <section className="bg-zinc-50 border-b border-zinc-100 py-12 px-6 md:px-12">
-        <div className="max-w-[1600px] mx-auto flex flex-col gap-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3">
-              <ShoppingCart className="w-8 h-8" /> FONT STORE
-            </h1>
-            <div className="w-full max-w-2xl">
-              <SmartSearch onAnalysisComplete={handleAnalysisComplete} />
-            </div>
-          </div>
+      {/* Dynamic Background Element */}
+      <div className="fixed top-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-indigo-50 rounded-full blur-[120px] opacity-40 pointer-events-none -z-10 animate-pulse"></div>
 
-          {/* Global Preview Bar */}
-          <div className="bg-white border-2 border-zinc-900 rounded-2xl p-1 flex items-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-            <div className="px-6 border-r border-zinc-100 flex items-center gap-3">
-              <Zap className="w-4 h-4 text-indigo-600 fill-indigo-600" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Live Test</span>
-            </div>
-            <input 
-              type="text"
-              placeholder="쇼핑 중인 폰트에 입혀볼 문구를 입력하세요"
-              className="flex-1 py-4 px-6 focus:outline-none text-lg font-bold placeholder:text-zinc-200"
-              value={previewText}
-              onChange={(e) => setPreviewText(e.target.value)}
-            />
-          </div>
-        </div>
-      </section>
-
-      <main className="max-w-[1600px] mx-auto px-6 md:px-12 py-16">
+      <main className="max-w-[1800px] mx-auto px-6 md:px-12">
         
-        {/* AI Result Section */}
-        {aiResult && (
-          <section className="mb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex items-center gap-4 mb-10">
-              <div className="px-4 py-1.5 bg-indigo-600 text-white text-[10px] font-black rounded-full uppercase tracking-widest">AI Top Picks</div>
-              <div className="h-px flex-1 bg-indigo-100"></div>
-              <button onClick={() => setAiResult(null)} className="text-zinc-400 text-xs font-bold hover:text-zinc-900">Close Result ×</button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {aiResult.recommendations.map((rec, idx) => {
-                const matchedFont = allFreeFonts.find(f => f.id === rec.fontId || f.name === rec.fontId);
-                return matchedFont ? <FontCardV2 key={idx} font={matchedFont} previewText={previewText} /> : null;
-              })}
-            </div>
-          </section>
-        )}
+        {/* Editorial Section Header */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-40 items-end">
+           <div className="lg:col-span-7">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-8 block">Issue No. 01 / Type & Sense</span>
+              <h1 className="text-7xl md:text-[160px] font-black tracking-[-0.06em] leading-[0.8] uppercase italic break-tighter">
+                 Typographic<br/>Intelligence.
+              </h1>
+           </div>
+           <div className="lg:col-span-5 max-w-sm ml-auto">
+              <p className="text-sm font-medium text-zinc-500 leading-relaxed border-l-2 border-zinc-900 pl-8">
+                 We transcend the traditional font repository. By synthesizing design intent with algorithmic precision, we define the future of visual identity.
+              </p>
+           </div>
+        </section>
 
-        <div className="grid grid-cols-12 gap-12">
-          {/* Sidebar Filters */}
-          <aside className="col-span-12 lg:col-span-2 space-y-12">
-            <div>
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                <Flame className="w-4 h-4 text-orange-500" /> HOT LIST
-              </h3>
-              <ul className="space-y-5">
-                {['All Fonts', 'Best Sellers', 'New Collection', 'Market Premium'].map((cat, i) => (
-                  <li key={cat}>
-                    <button className={`text-sm font-black uppercase tracking-tighter transition-all hover:translate-x-1 ${i === 0 ? 'text-indigo-600' : 'text-zinc-400 hover:text-zinc-900'}`}>
-                      {cat}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="p-8 bg-zinc-900 rounded-3xl text-white">
-               <h4 className="text-lg font-black mb-4 italic leading-tight">Elite<br/>Membership</h4>
-               <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-6">Unlimited Access</p>
-               <button className="w-full py-3 bg-white text-zinc-900 text-xs font-black rounded-xl hover:bg-indigo-500 hover:text-white transition-all">JOIN CLUB</button>
-            </div>
-          </aside>
+        {/* Intelligence Interaction Layer */}
+        <section className="mb-48 relative">
+           <div className="flex flex-col lg:flex-row gap-12 items-start">
+              <div className="w-full lg:w-1/2 group">
+                 <div className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">Search Intent</div>
+                 <div className="glass rounded-[40px] p-2 hover:shadow-[0_20px_80px_-20px_rgba(79,70,229,0.15)] transition-all duration-700 border border-zinc-100/50">
+                    <SmartSearch onAnalysisComplete={handleAnalysisComplete} />
+                 </div>
+              </div>
+              <div className="w-full lg:w-1/2">
+                 <div className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">Interactive Canvas</div>
+                 <div className="bg-zinc-950 rounded-[40px] p-8 text-white shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-indigo-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+                    <input 
+                       type="text"
+                       placeholder="Type to visualize..."
+                       className="w-full bg-transparent text-4xl md:text-6xl font-black focus:outline-none placeholder:text-zinc-800 relative z-10 italic"
+                       value={previewText}
+                       onChange={handlePreviewChange}
+                    />
+                    <div className="mt-12 flex justify-between items-end relative z-10">
+                       <div className="flex gap-8">
+                          <div className="flex flex-col gap-2">
+                             <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest">Minimalism</span>
+                             <div className="text-xl font-bold font-mono">{metrics.minimalism}%</div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                             <span className="text-[8px] font-black text-zinc-500 uppercase tracking-widest">Authority</span>
+                             <div className="text-xl font-bold font-mono">{metrics.authority}%</div>
+                          </div>
+                       </div>
+                       <Activity className="w-8 h-8 text-indigo-500 animate-pulse" />
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </section>
 
-          {/* Product Grid */}
-          <div className="col-span-12 lg:col-span-10">
-            <div className="flex justify-between items-end mb-12">
-               <h2 className="text-4xl font-black tracking-tighter italic">Featured Inventory</h2>
-               <div className="flex gap-6 text-[10px] font-black text-zinc-400 uppercase tracking-widest">
-                  <button className="text-zinc-900 underline underline-offset-8">Popularity</button>
-                  <button className="hover:text-zinc-900 transition-colors">Alphabetical</button>
-                  <button className="hover:text-zinc-900 transition-colors">Recent</button>
-               </div>
-            </div>
+        {/* Curated Collection Grid - The 'Lookbook' */}
+        <section className="mb-48">
+           <div className="flex justify-between items-end mb-20">
+              <h2 className="text-5xl font-black tracking-tighter uppercase italic">Curated Archive</h2>
+              <Link href="/index" className="group flex items-center gap-3 text-xs font-black uppercase tracking-widest hover:text-indigo-600 transition-all">
+                 Full Catalog <ChevronRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+              </Link>
+           </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-              {allFreeFonts.map(font => (
-                <FontCardV2 key={font.id} font={font} previewText={previewText} />
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-32">
+              {allFreeFonts.map((font, idx) => (
+                <div key={font.id} className={`${idx % 3 === 1 ? 'lg:translate-y-24' : idx % 3 === 2 ? 'lg:translate-y-12' : ''}`}>
+                   <FontCardV2 font={font} previewText={previewText} />
+                </div>
               ))}
-            </div>
+           </div>
+        </section>
 
-            <div className="mt-24 flex justify-center">
-               <Link href="/index" className="px-20 py-6 bg-zinc-900 text-white font-black rounded-2xl hover:bg-indigo-600 transition-all uppercase text-xs tracking-[0.3em] shadow-2xl">
-                  Explore Full Catalog
-               </Link>
-            </div>
-          </div>
-        </div>
+        {/* Feature: The Alpha Banner */}
+        <section className="mb-20">
+           <div className="relative h-[80vh] w-full rounded-[60px] overflow-hidden group">
+              <Image 
+                src="https://raw.githubusercontent.com/orioncactus/pretendard/master/images/cover.png" 
+                alt="Banner" 
+                fill 
+                className="object-cover transition-transform duration-[2000ms] group-hover:scale-110"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] group-hover:backdrop-blur-none transition-all duration-1000"></div>
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-6">
+                 <span className="text-[10px] font-black uppercase tracking-[0.5em] mb-8 bg-white/20 px-4 py-2 rounded-full backdrop-blur-md border border-white/30">Masterpiece of the Year</span>
+                 <h2 className="text-7xl md:text-[12vw] font-black tracking-[-0.08em] uppercase italic leading-none mb-12">Pretendard</h2>
+                 <Link href="/fonts/694" className="px-12 py-6 bg-white text-zinc-950 rounded-full font-black text-xs uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all shadow-2xl">
+                    Explore the Standard
+                 </Link>
+              </div>
+           </div>
+        </section>
+
       </main>
     </div>
   );
