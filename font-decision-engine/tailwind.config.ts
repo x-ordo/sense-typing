@@ -10,21 +10,27 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          black: "#1a1612",  // Ink Black (Authority)
-          gold: "#b08d57",   // Antique Gold (Premium)
-          red: "#8e2e2c",    // Vintage Red (Action)
-          paper: "#fdfbf7",  // Warm Paper (Base)
-          beige: "#e8dfd0",  // Sand Beige (Border)
+          black: "#1a1612",
+          gold: "#b08d57",
+          red: "#8e2e2c",
+          paper: "#fdfbf7",
+          beige: "#e8dfd0",
         },
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
-        serif: ["Georgia", "serif"], // For Authority Headings
+        sans: ["Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
+        serif: ["Pretendard", "Georgia", "serif"],
+        mono: ["Pretendard", "monospace"],
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      fontSize: {
+        "2xs": ["0.625rem", { lineHeight: "0.875rem" }],
+      },
+      borderRadius: {
+        "4xl": "2rem",
+      },
+      boxShadow: {
+        "soft": "0 2px 8px -2px rgba(0, 0, 0, 0.05)",
+        "card": "0 4px 16px -4px rgba(0, 0, 0, 0.08)",
       },
     },
   },

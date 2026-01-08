@@ -2,97 +2,109 @@
 
 export const runtime = 'edge';
 
-import { ShieldCheck, Globe, BarChart3, ChevronRight, Lock } from 'lucide-react';
+import { ShieldCheck, BarChart3, ChevronRight, Lock, Building2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function EnterprisePage() {
   return (
-    <div className="min-h-screen bg-white text-zinc-900 font-sans selection:bg-indigo-600 selection:text-white pt-32 pb-40">
-      
-      <main className="max-w-[1400px] mx-auto px-6 md:px-12">
-        
+    <div className="min-h-screen bg-brand-paper pt-24 pb-20">
+
+      <main className="max-w-6xl mx-auto px-6">
+
         {/* Sales Hero */}
-        <section className="mb-40">
-           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-900 text-white rounded-full text-[10px] font-black mb-10 tracking-[0.3em] uppercase">
-             For Agencies & Enterprise
-           </div>
-           <h1 className="text-6xl md:text-[120px] font-black tracking-[-0.06em] leading-[0.85] uppercase italic mb-12">
-             Govern Your<br/>
-             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Identity.</span>
-           </h1>
-           <p className="text-xl md:text-2xl text-zinc-400 font-medium max-w-2xl leading-relaxed">
-             조직의 모든 타이포그래피 라이선스 리스크를 제거하고, AI를 통해 브랜드 일관성을 완벽하게 통제하십시오.
-           </p>
+        <section className="mb-24">
+          <span className="mono-label text-brand-gold mb-4 block">For Agencies & Enterprise</span>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-brand-black mb-6 leading-tight">
+            브랜드 아이덴티티를<br/>
+            <span className="text-brand-gold">완벽하게 통제</span>하세요.
+          </h1>
+          <p className="text-lg md:text-xl text-zinc-500 max-w-2xl leading-relaxed">
+            조직의 모든 타이포그래피 라이선스 리스크를 제거하고,
+            AI를 통해 브랜드 일관성을 완벽하게 통제하십시오.
+          </p>
         </section>
 
-        {/* The Pain Point (High Contrast Section) */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-24 mb-60">
-           <div className="bg-zinc-50 p-12 md:p-20 rounded-[60px] border border-zinc-100">
-              <h3 className="text-3xl font-black mb-10 tracking-tighter uppercase italic">The License Anarchy</h3>
-              <ul className="space-y-8">
-                 {[
-                   "디자이너마다 다른 폰트 사용으로 인한 브랜드 파편화",
-                   "상업적 이용 가능 여부 불확실성에 따른 법적 리스크",
-                   "파편화된 구매 영수증과 복잡한 라이선스 갱신 관리"
-                 ].map((text, i) => (
-                   <li key={i} className="flex gap-4 text-zinc-500 font-bold leading-snug italic">
-                      <span className="text-red-500">✕</span> {text}
-                   </li>
-                 ))}
-              </ul>
-           </div>
-           <div className="flex flex-col justify-center">
-              <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-none">Stop the Chaos.<br/> Start Intelligence.</h2>
-              <p className="text-zinc-500 mb-12 font-medium">Sense Typing은 기업 전용 폰트 파이프라인을 통해 전사적 디자인 품질을 보장합니다.</p>
-              <div className="flex gap-4">
-                 <button className="px-10 py-5 bg-zinc-900 text-white font-black rounded-full text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all">Book a Demo</button>
-                 <button className="px-10 py-5 bg-white border-2 border-zinc-900 text-zinc-900 font-black rounded-full text-xs uppercase tracking-widest hover:bg-zinc-50 transition-all">Get PDF Deck</button>
-              </div>
-           </div>
-        </section>
-
-        {/* Feature Grid: Enterprise Grade */}
-        <section className="mb-60">
-           <div className="flex items-center gap-4 mb-20">
-              <div className="px-4 py-1.5 bg-indigo-50 text-indigo-600 text-[10px] font-black rounded-full uppercase tracking-widest border border-indigo-100">Core Infrastructure</div>
-              <div className="h-px flex-1 bg-zinc-100"></div>
-           </div>
-           
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        {/* The Pain Point */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-24">
+          <div className="bg-white border border-brand-beige p-8 md:p-12 rounded-3xl">
+            <h3 className="text-xl font-bold mb-8 text-brand-black">현재 상황</h3>
+            <ul className="space-y-6">
               {[
-                { icon: ShieldCheck, title: "License Guard", desc: "AI가 실시간으로 라이선스 조항을 분석하여 법적 리스크를 사전에 차단합니다." },
-                { icon: Lock, title: "Private Registry", desc: "우리 팀원들만 사용할 수 있는 승인된 폰트 라이브러리를 운영하세요." },
-                { icon: BarChart3, title: "ROI Dashboard", desc: "폰트 사용량 및 라이선스 비용 절감 수치를 정교한 데이터로 시각화합니다." }
-              ].map((item, i) => (
-                <div key={i} className="p-10 bg-white border border-zinc-100 rounded-[40px] hover:shadow-2xl transition-all group">
-                   <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                      <item.icon className="w-6 h-6" />
-                   </div>
-                   <h4 className="text-xl font-black mb-4 tracking-tight uppercase italic">{item.title}</h4>
-                   <p className="text-zinc-400 text-sm font-medium leading-relaxed">{item.desc}</p>
-                </div>
+                "디자이너마다 다른 폰트 사용으로 인한 브랜드 파편화",
+                "상업적 이용 가능 여부 불확실성에 따른 법적 리스크",
+                "파편화된 구매 영수증과 복잡한 라이선스 갱신 관리"
+              ].map((text, i) => (
+                <li key={i} className="flex gap-4 text-zinc-600 leading-snug">
+                  <span className="text-brand-red font-bold">✕</span> {text}
+                </li>
               ))}
-           </div>
+            </ul>
+          </div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-6 text-brand-black leading-tight">
+              혼란을 멈추고<br/>인텔리전스를 시작하세요.
+            </h2>
+            <p className="text-zinc-500 mb-8">
+              Sense Typing은 기업 전용 폰트 파이프라인을 통해
+              전사적 디자인 품질을 보장합니다.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <button className="px-6 py-3 bg-brand-black text-white font-bold rounded-xl hover:bg-brand-gold hover:text-brand-black transition-all">
+                데모 예약하기
+              </button>
+              <button className="px-6 py-3 bg-white border border-brand-beige text-brand-black font-bold rounded-xl hover:bg-brand-beige/50 transition-all">
+                PDF 자료 받기
+              </button>
+            </div>
+          </div>
         </section>
 
-        {/* Final CTA: Global Scale */}
-        <section className="bg-zinc-900 rounded-[60px] p-12 md:p-24 text-white relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-           <div className="relative z-10 text-center max-w-4xl mx-auto">
-              <Globe className="w-16 h-16 text-indigo-500 mx-auto mb-12 animate-spin-slow" />
-              <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-12 leading-none uppercase italic">Scale with Confidence.</h2>
-              <p className="text-zinc-400 text-lg md:text-xl mb-16 font-medium leading-relaxed italic">
-                &quot;Sense Typing은 단순한 폰트 스토어를 넘어, 글로벌 기업의 시각적 언어를 통합하고 보호하는 전략적 파트너입니다.&quot;
-              </p>
-              <div className="inline-flex items-center gap-10">
-                 <Link href="/market" className="text-xs font-black border-b-2 border-white pb-1 tracking-widest uppercase hover:text-indigo-400 hover:border-indigo-400 transition-all text-white">
-                    Explore Solutions
-                 </Link>
-                 <Link href="/pricing" className="group flex items-center gap-3 text-xs font-black tracking-widest uppercase hover:text-indigo-400 transition-all text-white">
-                    View Pricing <ChevronRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                 </Link>
+        {/* Feature Grid */}
+        <section className="mb-24">
+          <div className="flex items-center gap-4 mb-12">
+            <span className="mono-label text-brand-gold">Core Infrastructure</span>
+            <div className="h-px flex-1 bg-brand-beige"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { icon: ShieldCheck, title: "License Guard", desc: "AI가 실시간으로 라이선스 조항을 분석하여 법적 리스크를 사전에 차단합니다." },
+              { icon: Lock, title: "Private Registry", desc: "우리 팀원들만 사용할 수 있는 승인된 폰트 라이브러리를 운영하세요." },
+              { icon: BarChart3, title: "ROI Dashboard", desc: "폰트 사용량 및 라이선스 비용 절감 수치를 정교한 데이터로 시각화합니다." }
+            ].map((item, i) => (
+              <div key={i} className="bg-white border border-brand-beige p-8 rounded-2xl hover:shadow-card transition-all group">
+                <div className="w-12 h-12 bg-brand-beige/50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold group-hover:text-white transition-all">
+                  <item.icon className="w-6 h-6" />
+                </div>
+                <h4 className="text-lg font-bold mb-3 text-brand-black">{item.title}</h4>
+                <p className="text-zinc-500 text-sm leading-relaxed">{item.desc}</p>
               </div>
-           </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="bg-brand-black rounded-3xl p-8 md:p-16 text-white relative overflow-hidden">
+          <div className="relative z-10 text-center max-w-3xl mx-auto">
+            <div className="w-16 h-16 bg-brand-gold/20 rounded-2xl flex items-center justify-center mx-auto mb-8">
+              <Building2 className="w-8 h-8 text-brand-gold" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+              자신감 있게 확장하세요.
+            </h2>
+            <p className="text-zinc-400 text-lg mb-10 leading-relaxed">
+              Sense Typing은 단순한 폰트 스토어를 넘어,
+              글로벌 기업의 시각적 언어를 통합하고 보호하는 전략적 파트너입니다.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link href="/market" className="flex items-center gap-2 text-sm font-bold text-white border-b-2 border-white pb-1 hover:text-brand-gold hover:border-brand-gold transition-all">
+                솔루션 둘러보기
+              </Link>
+              <Link href="/pricing" className="group flex items-center gap-2 text-sm font-bold text-white hover:text-brand-gold transition-all">
+                가격 보기 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
         </section>
 
       </main>
