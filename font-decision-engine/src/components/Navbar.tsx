@@ -3,17 +3,23 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Archive, Menu, X } from 'lucide-react'
+import { Search, Archive, Menu, X, ShoppingCart } from 'lucide-react'
 import SearchModal from './SearchModal'
+import UserMenu from './auth/UserMenu'
+import { CartDrawer } from './cart'
+import { useCartStore, useCartItemCount } from '@/lib/cart/store'
 
 export default function Navbar() {
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const openCart = useCartStore((state) => state.openCart)
+  const cartItemCount = useCartItemCount()
 
   const navLinks = [
     { href: '/', label: '컬렉션' },
     { href: '/market', label: '프리미엄' },
+    { href: '/experts', label: '전문가' },
     { href: '/enterprise', label: '기업 서비스' },
   ]
 
@@ -80,12 +86,28 @@ export default function Navbar() {
             </button>
 
             {/* Cart Button */}
-            <button className="w-10 h-10 flex items-center justify-center rounded-full bg-brand-black text-white hover:bg-brand-gold transition-colors relative">
-              <Archive className="w-4 h-4" />
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-red text-[9px] font-bold text-white rounded-full flex items-center justify-center">
-                0
-              </span>
+            <button
+              onClick={openCart}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-brand-black text-white hover:bg-brand-gold hover:text-brand-black transition-colors relative"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand-red text-[9px] font-bold text-white rounded-full flex items-center justify-center">
+                  {cartItemCount > 9 ? '9+' : cartItemCount}
+                </span>
+              )}
             </button>
+
+            {/* Archive Button */}
+            <Link
+              href="/mypage/archives"
+              className="hidden sm:flex w-10 h-10 items-center justify-center rounded-full bg-brand-beige/50 text-zinc-600 hover:bg-brand-beige hover:text-brand-black transition-colors"
+            >
+              <Archive className="w-4 h-4" />
+            </Link>
+
+            {/* User Menu */}
+            <UserMenu />
 
             {/* Mobile Menu Button */}
             <button
@@ -160,6 +182,9 @@ export default function Navbar() {
 
       {/* Search Modal */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+
+      {/* Cart Drawer */}
+      <CartDrawer />
     </>
   )
 }

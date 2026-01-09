@@ -17,24 +17,36 @@ export interface LicenseDetails {
  */
 export interface Font {
   id: string;
+  slug?: string;
   name: string;
+  korean_name?: string;
   foundry: string;
   designer?: string;
-  license_type: 'free' | 'commercial' | 'subscription' | 'ofl';
+  license_type: 'free' | 'commercial' | 'subscription' | 'ofl' | 'mixed';
   license_details?: LicenseDetails;
   preview_image?: string;
-  tags: string[];
-  description: string;
   webfont_url?: string;
+  download_url?: string;
+  tags: string[];
+  emotion_tags?: string[];
+  category?: string;
+  description: string;
+  weight_count?: number;
   price?: number;
   file_formats?: string[];
   glyph_count?: {
     korean: number;
     english?: number;
+    total?: number;
   };
   source_url: string;
+  crawl_source?: 'noonnu' | 'google' | 'manual';
+  crawl_source_id?: string;
   views?: number;
+  is_verified?: boolean;
+  is_active?: boolean;
   created_at?: string;
+  updated_at?: string;
   // Extended fields for detail page
   pros?: string[];
   cons?: string[];

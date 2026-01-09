@@ -6,7 +6,8 @@ import FontCardSkeleton from '@/components/FontCardSkeleton';
 import SmartSearch from '@/components/SmartSearch';
 import { createSupabaseBrowser } from '@/lib/supabase/fonts';
 import { MOCK_FONTS, shouldUseMockData } from '@/lib/mock-data';
-import { ArrowRight, Shield, TrendingUp } from 'lucide-react';
+import { ArrowRight, Shield, TrendingUp, Users, Star, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 import type { FontCardProps } from '@/types/font';
 
 export default function Home() {
@@ -182,6 +183,130 @@ export default function Home() {
           </div>
         )}
       </main>
+
+      {/* Expert Section */}
+      <section className="bg-white border-t border-brand-beige">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
+          {/* Section Header */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-gold/10 text-brand-gold rounded-full text-xs font-medium mb-4">
+                <Users className="w-3.5 h-3.5" />
+                Expert Marketplace
+              </div>
+              <h2 className="font-serif text-3xl text-brand-black mb-2">
+                전문가의 도움이 필요하신가요?
+              </h2>
+              <p className="text-sm text-zinc-500 max-w-lg">
+                타이포그래피, 브랜드 아이덴티티, 캐치프레이즈 분야의 검증된 전문가들이
+                여러분의 프로젝트를 성공으로 이끌어드립니다.
+              </p>
+            </div>
+            <Link
+              href="/experts"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-brand-black text-white text-sm font-medium rounded-full hover:bg-zinc-800 transition-colors group"
+            >
+              전문가 둘러보기
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {/* Expert Categories */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Typography Consulting */}
+            <Link
+              href="/experts?specialty=typography-consulting"
+              className="group p-6 bg-brand-paper rounded-2xl border border-brand-beige hover:border-brand-gold/50 hover:shadow-lg transition-all"
+            >
+              <div className="w-12 h-12 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-gold/20 transition-colors">
+                <span className="text-2xl">Aa</span>
+              </div>
+              <h3 className="font-bold text-brand-black mb-2 group-hover:text-brand-gold transition-colors">
+                타이포그래피 컨설팅
+              </h3>
+              <p className="text-sm text-zinc-500 mb-4">
+                폰트 선택, 가독성 최적화, 타이포그래피 시스템 설계까지 전문적인 조언을 받아보세요.
+              </p>
+              <div className="flex items-center gap-4 text-xs text-zinc-400">
+                <span className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 text-brand-gold fill-brand-gold" />
+                  4.9 평점
+                </span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                  검증된 전문가
+                </span>
+              </div>
+            </Link>
+
+            {/* Brand Identity */}
+            <Link
+              href="/experts?specialty=brand-identity"
+              className="group p-6 bg-brand-paper rounded-2xl border border-brand-beige hover:border-brand-gold/50 hover:shadow-lg transition-all"
+            >
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+                <span className="text-2xl">✦</span>
+              </div>
+              <h3 className="font-bold text-brand-black mb-2 group-hover:text-brand-gold transition-colors">
+                브랜드 아이덴티티
+              </h3>
+              <p className="text-sm text-zinc-500 mb-4">
+                로고, BI/CI 디자인, 브랜드 비주얼 시스템까지 일관된 브랜드 경험을 만들어드립니다.
+              </p>
+              <div className="flex items-center gap-4 text-xs text-zinc-400">
+                <span className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 text-brand-gold fill-brand-gold" />
+                  4.8 평점
+                </span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                  검증된 전문가
+                </span>
+              </div>
+            </Link>
+
+            {/* Catchphrase */}
+            <Link
+              href="/experts?specialty=catchphrase"
+              className="group p-6 bg-brand-paper rounded-2xl border border-brand-beige hover:border-brand-gold/50 hover:shadow-lg transition-all"
+            >
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-200 transition-colors">
+                <span className="text-2xl">💬</span>
+              </div>
+              <h3 className="font-bold text-brand-black mb-2 group-hover:text-brand-gold transition-colors">
+                캐치프레이즈 & 슬로건
+              </h3>
+              <p className="text-sm text-zinc-500 mb-4">
+                브랜드의 핵심 가치를 담은 강력한 메시지와 카피라이팅을 제작해드립니다.
+              </p>
+              <div className="flex items-center gap-4 text-xs text-zinc-400">
+                <span className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 text-brand-gold fill-brand-gold" />
+                  4.9 평점
+                </span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                  검증된 전문가
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="mt-12 p-8 bg-gradient-to-br from-brand-gold/10 to-brand-beige/50 rounded-2xl text-center">
+            <p className="text-zinc-600 mb-4">
+              전문가로 활동하고 싶으신가요?
+            </p>
+            <Link
+              href="/experts/apply"
+              className="inline-flex items-center gap-2 text-brand-gold font-medium hover:underline"
+            >
+              전문가 신청하기
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Status Footer */}
       <footer className="fixed bottom-0 left-0 w-full px-6 md:px-12 py-4 border-t border-brand-beige bg-white/90 backdrop-blur-sm z-50">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Sense Typing - 폰트 의사결정 엔진",
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="antialiased bg-brand-paper text-brand-black">
-        <Navbar />
-        <ErrorBoundary>
-          {children}
-        </ErrorBoundary>
+        <AuthProvider>
+          <Navbar />
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
+        </AuthProvider>
       </body>
     </html>
   );
